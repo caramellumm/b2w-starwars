@@ -1,11 +1,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <!-- *********************************** -->
+  <!-- Padrao para o pom.xml do modulo WEB -->
+  <!-- *********************************** -->
   <modelVersion>4.0.0</modelVersion>
   <groupId>StarWars</groupId>
   <artifactId>StarWars</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
+  
+  
+  <!-- ******************************** -->
+  <!-- Configuracao do build do projeto -->
+  <!-- ******************************** -->
   <build>
     <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
+    <resources>
+		<resource>
+			<directory>src</directory>
+		</resource>
+	</resources>
+	<testResources>
+		<testResource>
+			<directory>test</directory>
+		</testResource>
+	</testResources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -24,6 +44,11 @@
       </plugin>
     </plugins>
   </build>
+  
+  
+  <!-- **************************************** -->
+  <!-- Configuracao das dependencias do projeto -->
+  <!-- **************************************** -->
   <dependencies>
   	<dependency>
       <groupId>junit</groupId>
@@ -63,6 +88,13 @@
 		<artifactId>jersey-core</artifactId>
 		<version>1.19.4</version>
 	</dependency>
+	
+	<dependency>
+	    <groupId>org.mongodb</groupId>
+	    <artifactId>mongo-java-driver</artifactId>
+	    <version>3.10.2</version>
+	</dependency>
+
   </dependencies>
   
   <profiles>
