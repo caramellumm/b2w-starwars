@@ -8,8 +8,8 @@ import com.mongodb.client.FindIterable;
 
 import br.com.b2w.exception.BusinessException;
 import br.com.b2w.exception.IntegrationException;
-import br.com.mongo.connection.DBConnection;
-import br.com.mongo.document.Planetas;
+import br.com.b2w.mongo.connection.DBConnection;
+import br.com.b2w.mongo.document.Planetas;
 
 public class PlanetasBusiness {
 	

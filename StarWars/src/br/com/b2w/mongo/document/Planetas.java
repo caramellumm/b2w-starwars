@@ -1,4 +1,4 @@
-package br.com.mongo.document;
+package br.com.b2w.mongo.document;
 
 import org.bson.types.ObjectId;
 

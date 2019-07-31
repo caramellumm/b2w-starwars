@@ -1,4 +1,4 @@
-package br.com.mongo.connection;
+package br.com.b2w.mongo.connection;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
@@ -16,7 +16,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import br.com.b2w.exception.IntegrationException;
-import br.com.mongo.document.Planetas;
+import br.com.b2w.mongo.document.Planetas;
 
 public class DBConnection {
 	public static MongoClient mongoClient;

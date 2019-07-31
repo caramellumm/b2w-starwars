@@ -36,10 +36,8 @@ public class PlanetasRest {
 	public Response listarPlanetas() {
 		try {
 			PlanetasBusiness pb = new PlanetasBusiness();
-
 			JSONObject jsonObjectListaPlanetas = pb.listarPlanetas();
-
-
+			
 			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
 			return Response.status(500).entity("Erro ao listar os planetas: " + e.getMessage()).build();
