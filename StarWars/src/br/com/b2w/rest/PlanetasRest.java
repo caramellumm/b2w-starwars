@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONObject;
 
 import br.com.b2w.business.PlanetasBusiness;
+import br.com.b2w.rest.client.ServiceClient;
 
 @Path("/planetas")
 public class PlanetasRest {
@@ -31,12 +32,15 @@ public class PlanetasRest {
 		}
 	}
 	
-	@POST
+	@GET
 	@Produces("application/json")
 	public Response listarPlanetas() {
 		try {
 			PlanetasBusiness pb = new PlanetasBusiness();
 			JSONObject jsonObjectListaPlanetas = pb.listarPlanetas();
+			
+			ServiceClient client = new ServiceClient();
+			client.consultarPlanetas();
 			
 			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
