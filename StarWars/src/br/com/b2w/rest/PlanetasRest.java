@@ -11,6 +11,8 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
+import br.com.b2w.business.PlanetasBusiness;
+
 @Path("/planetas")
 public class PlanetasRest {
 	
@@ -20,17 +22,12 @@ public class PlanetasRest {
 	public Response inserirPlaneta(@PathParam("nome") String nome, @PathParam("clima") String clima, @PathParam("terreno") String terreno) {
 		
 		try {
-			
-			JSONObject jsonObject = new JSONObject();
-			//Logica para buscar planetas
-			jsonObject.put("Id", "");
-			jsonObject.put("Nome", nome);
-			jsonObject.put("Clima", clima);
-			jsonObject.put("Terreno", terreno);
-			
+			PlanetasBusiness pb = new PlanetasBusiness();
+			JSONObject jsonObject = pb.inserirPlaneta(nome, clima, terreno);
 			return Response.status(200).entity(jsonObject.toString()).build();
+			
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao .... : " + e.getMessage()).build();
+			return Response.status(500).entity("Erro ao inserir um planeta : " + e.getMessage()).build();
 		}
 	}
 	
@@ -38,17 +35,14 @@ public class PlanetasRest {
 	@Produces("application/json")
 	public Response listarPlanetas() {
 		try {
-			
-			JSONObject jsonObject = new JSONObject();
-			//Logica para buscar planetas
-			jsonObject.put("Id", "");
-			jsonObject.put("Nome", "");
-			jsonObject.put("Clima", "");
-			jsonObject.put("Terreno", "");
-			
-			return Response.status(200).entity(jsonObject.toString()).build();
+			PlanetasBusiness pb = new PlanetasBusiness();
+
+			JSONObject jsonObjectListaPlanetas = pb.listarPlanetas();
+
+
+			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao .... : " + e.getMessage()).build();
+			return Response.status(500).entity("Erro ao listar os planetas: " + e.getMessage()).build();
 		}
 	}
 	
@@ -58,16 +52,13 @@ public class PlanetasRest {
 	public Response listarPlanetas(@PathParam("nome") String nome) {
 		try {
 			
-			JSONObject jsonObject = new JSONObject();
-			//Logica para buscar planetas
-			jsonObject.put("Id", "");
-			jsonObject.put("Nome", "");
-			jsonObject.put("Clima", "");
-			jsonObject.put("Terreno", "");
+			PlanetasBusiness pb = new PlanetasBusiness();
 			
-			return Response.status(200).entity(jsonObject.toString()).build();
+			JSONObject jsonObjectListaPlanetas = pb.listarPlanetas();
+			
+			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao .... : " + e.getMessage()).build();
+			return Response.status(500).entity("Erro ao listar os planetas: " + e.getMessage()).build();
 		}
 	}
 	

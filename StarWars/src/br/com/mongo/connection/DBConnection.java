@@ -1,12 +1,17 @@
 package br.com.mongo.connection;
 
-import org.bson.BsonBinary;
-import org.bson.conversions.Bson;
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.MongoClient;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoSocketOpenException;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
@@ -16,9 +21,15 @@ import br.com.mongo.document.Planetas;
 public class DBConnection {
 	public static MongoClient mongoClient;
 	
-	public DBConnection() throws Exception {
+	public DBConnection() throws IntegrationException {
 		try {
-			mongoClient = new MongoClient("localhost:27017");
+
+			CodecRegistry pojoCodecRegistry = fromRegistries(com.mongodb.MongoClient.getDefaultCodecRegistry(),
+					fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+
+			MongoClientSettings settings = MongoClientSettings.builder().codecRegistry(pojoCodecRegistry).build();
+			mongoClient = MongoClients.create(settings);
+
 		} catch (MongoSocketOpenException e) {
 			throw new IntegrationException("Erro ao abrir a conexao", e);
 		}
@@ -35,7 +46,7 @@ public class DBConnection {
 		}
     }
     
-    public void closeConnection() throws Exception {
+    public void closeConnection() throws IntegrationException {
     	try {
     		mongoClient.close();
 		} catch (Exception e) {
@@ -46,13 +57,13 @@ public class DBConnection {
     public FindIterable<Planetas> buscarPlanetas() throws IntegrationException {
     	try {
     		MongoCollection<Planetas> collection = this.getCollection();
-    		return collection.find();
+    		FindIterable<Planetas> find = collection.find();
+			return find;
 		} catch (Exception e) {
 			throw new IntegrationException("Erro ao buscarPlanetas", e);
 		}
     	
     }
-    
     
     public void inserirPlaneta(Planetas planeta) throws IntegrationException {
     	try {

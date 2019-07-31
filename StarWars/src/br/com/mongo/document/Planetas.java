@@ -1,16 +1,18 @@
 package br.com.mongo.document;
 
+import org.bson.types.ObjectId;
+
 public class Planetas {
 
-	public Long id;
+	public ObjectId id;
 	public String nome;
 	public String clima;
 	public String terreno;
 	
-	public Long getId() {
+	public ObjectId getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(ObjectId id) {
 		this.id = id;
 	}
 	public String getNome() {
