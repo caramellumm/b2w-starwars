@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
-import com.owlike.genson.Genson;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -16,7 +15,7 @@ import br.com.b2w.mongo.document.PlanetApiStarWars;
 
 public class ServiceClient {
 
-	private final String URL_SERVICE = "https://swapi.co/api/planets/";
+	private final String URL_SERVICE = "https://swapi.co/api/planets/";	
 
 	public void consultarPlanetas() throws ServiceException {
 
