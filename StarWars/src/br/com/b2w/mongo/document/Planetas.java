@@ -1,6 +1,7 @@
 package br.com.b2w.mongo.document;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 
@@ -14,6 +15,7 @@ public class Planetas implements Serializable{
 	public String nome;
 	public String clima;
 	public String terreno;
+	public List<String> filmes;
 	
 	public ObjectId getId() {
 		return id;
@@ -39,6 +41,13 @@ public class Planetas implements Serializable{
 	public void setTerreno(String terreno) {
 		this.terreno = terreno;
 	}
+	public List<String> getFilmes() {
+		return filmes;
+	}
+	public void setFilmes(List<String> filmes) {
+		this.filmes = filmes;
+	}
+	
 	
 	
 }

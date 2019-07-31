@@ -11,13 +11,13 @@ import com.sun.jersey.api.client.WebResource.Builder;
 
 import br.com.b2w.exception.ServiceException;
 import br.com.b2w.mongo.document.ApiSwarWarsResult;
-import br.com.b2w.mongo.document.PlanetApiStarWars;
+import br.com.b2w.mongo.document.ApiStarWarsPlanet;
 
 public class ServiceClient {
 
 	private final String URL_SERVICE = "https://swapi.co/api/planets/";	
 
-	public void consultarPlanetas() throws ServiceException {
+	public List<ApiStarWarsPlanet> consultarPlanetas() throws ServiceException {
 
 		try {
 
@@ -32,10 +32,7 @@ public class ServiceClient {
 			}
 			
 			ApiSwarWarsResult apiSwarWarsResult = response.getEntity(ApiSwarWarsResult.class);
-			List<PlanetApiStarWars> results = apiSwarWarsResult.getResults();
-			for (PlanetApiStarWars planetApiStarWars : results) {
-				// clocar aqui a logica para varrer os planetas.
-			}
+			return apiSwarWarsResult.getResults();
 
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage(), e);

@@ -13,7 +13,7 @@ public class ApiSwarWarsResult implements Serializable{
 	private float count;
 	 private String next;
 	 private String previous;	
-	 private List<PlanetApiStarWars> results;
+	 private List<ApiStarWarsPlanet> results;
 	 
 	public float getCount() {
 		return count;
@@ -33,10 +33,10 @@ public class ApiSwarWarsResult implements Serializable{
 	public void setPrevious(String previous) {
 		this.previous = previous;
 	}
-	public List<PlanetApiStarWars> getResults() {
+	public List<ApiStarWarsPlanet> getResults() {
 		return results;
 	}
-	public void setResults(List<PlanetApiStarWars> results) {
+	public void setResults(List<ApiStarWarsPlanet> results) {
 		this.results = results;
 	}
 

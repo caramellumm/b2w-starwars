@@ -3,7 +3,7 @@ package br.com.b2w.mongo.document;
 import java.io.Serializable;
 import java.util.List;
 
-public class PlanetApiStarWars implements Serializable{
+public class ApiStarWarsPlanet implements Serializable{
 	
 	/**
 	 * 
@@ -12,11 +12,11 @@ public class PlanetApiStarWars implements Serializable{
 	private String name;
 	private List<String> films;
 		
-	public PlanetApiStarWars() {
+	public ApiStarWarsPlanet() {
 
 	}
 
-	public PlanetApiStarWars(String name, List<String> films) {
+	public ApiStarWarsPlanet(String name, List<String> films) {
 		this.name = name;
 		this.films = films;
 	}

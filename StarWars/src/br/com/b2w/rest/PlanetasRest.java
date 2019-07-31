@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
 
 import br.com.b2w.business.PlanetasBusiness;
@@ -39,9 +40,6 @@ public class PlanetasRest {
 			PlanetasBusiness pb = new PlanetasBusiness();
 			JSONObject jsonObjectListaPlanetas = pb.listarPlanetas();
 			
-			ServiceClient client = new ServiceClient();
-			client.consultarPlanetas();
-			
 			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
 			return Response.status(500).entity("Erro ao listar os planetas: " + e.getMessage()).build();
@@ -55,12 +53,11 @@ public class PlanetasRest {
 		try {
 			
 			PlanetasBusiness pb = new PlanetasBusiness();
-			
 			JSONObject jsonObjectListaPlanetas = pb.listarPlanetas();
 			
 			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao listar os planetas: " + e.getMessage()).build();
+			return Response.status(500).entity("Erro ao listar os planetas por nome: " + e.getMessage()).build();
 		}
 	}
 	
@@ -68,26 +65,22 @@ public class PlanetasRest {
 	@POST
 	@Path("{id}")
 	@Produces("application/json")
-	public Response listarPlanetas(@PathParam("id") Integer id) {
+	public Response listarPlanetas(@PathParam("id") ObjectId id) {
 		try {
-			
-			JSONObject jsonObject = new JSONObject();
-			//Logica para buscar planetas
-			jsonObject.put("Id", "");
-			jsonObject.put("Nome", "");
-			jsonObject.put("Clima", "");	
-			jsonObject.put("Terreno", "");
-			
-			return Response.status(200).entity(jsonObject.toString()).build();
+
+			PlanetasBusiness pb = new PlanetasBusiness();
+			JSONObject jsonObjectListaPlanetas = pb.listarPlanetas(id);
+
+			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao .... : " + e.getMessage()).build();
+			return Response.status(500).entity("Erro ao listar os planetas por id: " + e.getMessage()).build();
 		}
 	}
 	
 	@DELETE
 	@Path("{id}")
 	@Produces("application/json")
-	public Response removerPlaneta(@PathParam("id") Integer Id) {
+	public Response removerPlaneta(@PathParam("id") Long Id) {
 		try {
 			
 			JSONObject jsonObject = new JSONObject();
@@ -96,7 +89,7 @@ public class PlanetasRest {
 			
 			return Response.status(200).entity(jsonObject.toString()).build();
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao .... : " + e.getMessage()).build();
+			return Response.status(500).entity("Erro ao remover planta: " + e.getMessage()).build();
 		}
 	}
 	

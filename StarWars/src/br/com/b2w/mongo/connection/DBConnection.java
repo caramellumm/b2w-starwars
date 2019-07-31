@@ -5,6 +5,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.types.ObjectId;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClientSettings;
@@ -31,6 +32,9 @@ public class DBConnection {
 			mongoClient = MongoClients.create(settings);
 
 		} catch (MongoSocketOpenException e) {
+			throw new IntegrationException("Erro ao abrir a conexao", e);
+			
+		} catch (Exception e) {
 			throw new IntegrationException("Erro ao abrir a conexao", e);
 		}
 	}
@@ -74,10 +78,10 @@ public class DBConnection {
 		}
     }
     
-    public FindIterable<Planetas> buscarPlanetasPorNome(Planetas planeta) throws IntegrationException {
+    public FindIterable<Planetas> buscarPlanetasPorNome(String nome) throws IntegrationException {
     	try {
     		MongoCollection<Planetas> collection = this.getCollection();
-    		BasicDBObject query = new BasicDBObject("nome", new BasicDBObject("$gt", planeta.getNome()));
+    		BasicDBObject query = new BasicDBObject("nome", new BasicDBObject("$gt", nome));
     		return collection.find(query);
 		} catch (Exception e) {
 			throw new IntegrationException("Erro ao buscarPlanetas por Nome", e);
@@ -85,10 +89,10 @@ public class DBConnection {
     	
     }
     
-    public FindIterable<Planetas> buscarPlanetasPorId(Planetas planeta) throws IntegrationException {
+    public FindIterable<Planetas> buscarPlanetasPorId(ObjectId id) throws IntegrationException {
     	try {
     		MongoCollection<Planetas> collection = this.getCollection();
-    		BasicDBObject query = new BasicDBObject("_id", new BasicDBObject("$gt", planeta.getId()));
+    		BasicDBObject query = new BasicDBObject("_id", new BasicDBObject("$gt", id));
     		return collection.find(query);
 		} catch (Exception e) {
 			throw new IntegrationException("Erro ao buscarPlanetas por ID", e);
