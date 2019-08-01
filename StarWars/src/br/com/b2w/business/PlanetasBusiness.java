@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.bson.types.ObjectId;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mongodb.client.FindIterable;
@@ -45,7 +46,7 @@ public class PlanetasBusiness {
 		}
 	}
 	
-	public JSONObject listarPlanetas() throws IntegrationException, BusinessException {
+	public JSONArray listarPlanetas() throws IntegrationException, BusinessException {
 		DBConnection conn = null;
 		try {
 			conn = new DBConnection();
@@ -134,44 +135,44 @@ public class PlanetasBusiness {
 
 	}
 	
-	
+	// Sobrescrevendo o retorno dos planetas
 	public List<Planetas> buscarAparicoesEmFilmes(List<Planetas> listPlanetas) throws Exception {
 		try {
 			ServiceClient client = new ServiceClient();
 			List<ApiStarWarsPlanet> consultarPlanetas = client.consultarPlanetas();
 			
-			
 			for (Planetas planeta : listPlanetas) {
 				for (ApiStarWarsPlanet planetApiStarWars : consultarPlanetas) {
 					if(planetApiStarWars.getName().equals(planeta.getNome())){
-						planeta.getFilmes().addAll(planetApiStarWars.getFilms());
+						planeta.setFilmes(planetApiStarWars.getFilms());
 					}
 				}
 			}
 			
 			return listPlanetas;
 			
-		} catch (ServiceException e) {
-			throw new BusinessException(e.getMessage(), e);
-			
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
 	
-	public JSONObject converterParaJson(List<Planetas> planetas) throws BusinessException {
+	public JSONArray converterParaJson(List<Planetas> planetas) throws BusinessException {
 		try {
 			
-			JSONObject jsonObjectListPlanetas = new JSONObject();
+			JSONArray jsonArrayPlanetas = new JSONArray();
+			JSONObject jsonObjectListPlanetas;
 			
 			for (Planetas planeta : planetas) {
+				jsonObjectListPlanetas = new JSONObject();
 				jsonObjectListPlanetas.put("Id", planeta.getId());
 				jsonObjectListPlanetas.put("Nome", planeta.getNome());
 				jsonObjectListPlanetas.put("Clima", planeta.getClima());
 				jsonObjectListPlanetas.put("Terreno", planeta.getTerreno());
+				jsonObjectListPlanetas.put("Filmes", planeta.getFilmes());
+				jsonArrayPlanetas.put(jsonObjectListPlanetas);
 			}
 			
-			return jsonObjectListPlanetas;
+			return jsonArrayPlanetas;
 			
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage(), e);

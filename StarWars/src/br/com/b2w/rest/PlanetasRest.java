@@ -10,10 +10,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.bson.types.ObjectId;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import br.com.b2w.business.PlanetasBusiness;
-import br.com.b2w.rest.client.ServiceClient;
 
 @Path("/planetas")
 public class PlanetasRest {
@@ -38,7 +38,7 @@ public class PlanetasRest {
 	public Response listarPlanetas() {
 		try {
 			PlanetasBusiness pb = new PlanetasBusiness();
-			JSONObject jsonObjectListaPlanetas = pb.listarPlanetas();
+			JSONArray jsonObjectListaPlanetas = pb.listarPlanetas();
 			
 			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
@@ -53,7 +53,7 @@ public class PlanetasRest {
 		try {
 			
 			PlanetasBusiness pb = new PlanetasBusiness();
-			JSONObject jsonObjectListaPlanetas = pb.listarPlanetas();
+			JSONArray jsonObjectListaPlanetas = pb.listarPlanetas();
 			
 			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
