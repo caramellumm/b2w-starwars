@@ -32,6 +32,7 @@ public class PlanetasBusiness {
 			planeta.setNome(nome);
 			planeta.setClima(clima);
 			planeta.setTerreno(terreno);
+			
 			conn.inserirPlaneta(planeta);
 			
 			JSONObject jsonObjectListPlanetas = new JSONObject();
