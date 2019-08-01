@@ -80,14 +80,13 @@ public class PlanetasRest {
 	@DELETE
 	@Path("{id}")
 	@Produces("application/json")
-	public Response removerPlaneta(@PathParam("id") Long Id) {
+	public Response removerPlaneta(@PathParam("id") String id) {
 		try {
+
+			PlanetasBusiness pb = new PlanetasBusiness();
+			JSONObject jsonObjectListaPlanetas = pb.removerPlaneta(id);
 			
-			JSONObject jsonObject = new JSONObject();
-			//Logica para buscar planetas
-			jsonObject.put("Id", "");
-			
-			return Response.status(200).entity(jsonObject.toString()).build();
+			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
 			return Response.status(500).entity("Erro ao remover planta: " + e.getMessage()).build();
 		}

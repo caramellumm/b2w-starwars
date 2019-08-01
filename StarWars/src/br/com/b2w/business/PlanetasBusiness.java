@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.result.DeleteResult;
 
 import br.com.b2w.exception.BusinessException;
 import br.com.b2w.exception.IntegrationException;
@@ -133,6 +134,32 @@ public class PlanetasBusiness {
 			conn.closeConnection();
 		}
 
+	}
+	
+	public JSONObject removerPlaneta(String id) throws BusinessException, IntegrationException {
+
+		DBConnection conn = null;
+		try {
+
+			conn = new DBConnection();
+			DeleteResult resultado = conn.removerPlanetaPorID(id);
+			JSONObject jsonObjectListPlanetas = new JSONObject();
+			
+			if(resultado.wasAcknowledged()) {
+				jsonObjectListPlanetas.put("retorno", "Documento deletado com Sucesso");
+				jsonObjectListPlanetas.put("Numero de Documentos Deletados", resultado.getDeletedCount());
+			} else {
+				jsonObjectListPlanetas.put("retorno", "Nenhum documento deletado");
+			}
+			
+			return jsonObjectListPlanetas;
+			
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage(), e);
+			
+		} finally {
+			conn.closeConnection();
+		}
 	}
 	
 	// Sobrescrevendo o retorno dos planetas

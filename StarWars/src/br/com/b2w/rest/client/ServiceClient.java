@@ -28,7 +28,7 @@ public class ServiceClient {
 			ClientResponse response = accept.get(ClientResponse.class);
 
 			if (response.getStatus() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+				throw new RuntimeException("Erro ao recuperar dados da API swapi.co: Erro HTTP: " + response.getStatus());
 			}
 			
 			ApiSwarWarsResult apiSwarWarsResult = response.getEntity(ApiSwarWarsResult.class);

@@ -5,6 +5,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import com.mongodb.BasicDBObject;
@@ -15,6 +16,8 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
 
 import br.com.b2w.exception.IntegrationException;
 import br.com.b2w.mongo.document.Planetas;
@@ -100,6 +103,24 @@ public class DBConnection {
     	
     }
     
+    public DeleteResult removerPlanetaPorNome(String nome) throws IntegrationException {
+    	try {
+    		MongoCollection<Planetas> collection = this.getCollection();
+    		BasicDBObject query = new BasicDBObject("nome", new BasicDBObject("$gt", nome));
+    		return collection.deleteOne(query);
+		} catch (Exception e) {
+			throw new IntegrationException("Erro ao excluir planeta por nome", e);
+		}
+    }
     
+    public DeleteResult removerPlanetaPorID(String id) throws IntegrationException {
+    	try {
+    		
+    		MongoCollection<Planetas> collection = this.getCollection();
+    		return collection.deleteOne(Filters.eq("_id", new ObjectId(id)));
+		} catch (Exception e) {
+			throw new IntegrationException("Erro ao excluir planeta por nome", e);
+		}
+    }
 
 }
