@@ -119,8 +119,20 @@ public class PlanetasBusinessTest extends JerseyTest{
 		
 	}
 	
+	@Test(expected = BusinessException.class)
+	public void testErroRemoverPlaneta() throws BusinessException, IntegrationException {
+		PlanetasBusiness planetasBusiness = new PlanetasBusiness();
+		String id = "5d44313e94dcc961b3120e91";
+		JSONObject removerPlaneta = planetasBusiness.removerPlaneta(id);
+		JSONObject jsonObjectListPlanetas = new JSONObject();
+		jsonObjectListPlanetas.put("retorno", "Documento deletado com Sucesso");
+		assertEquals(jsonObjectListPlanetas.get("retorno"), removerPlaneta.get("retorno"));
+		
+	}
+	
 	@Test
 	public void testBuscarAparicoesEmFilmes() {
+		
 		
 	}
 	
