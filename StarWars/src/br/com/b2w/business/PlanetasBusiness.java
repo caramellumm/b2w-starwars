@@ -79,26 +79,26 @@ public class PlanetasBusiness {
 
 	}
 	
-	public JSONObject listarPlanetas(String nome) throws BusinessException, IntegrationException{
+	public JSONArray listarPlanetas(String nome) throws BusinessException, IntegrationException{
 		
 		DBConnection conn = null;
 		try {
 			conn = new DBConnection();
 			FindIterable<Planetas> buscarPlanetas = conn.buscarPlanetasPorNome(nome);
 			
-			JSONObject jsonObjectListPlanetas = new JSONObject();
-			
+			List<Planetas> listPlanetas = new ArrayList<Planetas>();
+
 			buscarPlanetas.forEach(new Consumer<Planetas>() {
 
-				@Override	
+				@Override
 				public void accept(Planetas planeta) {
-					jsonObjectListPlanetas.put("Id", planeta.getId());
-					jsonObjectListPlanetas.put("Nome", planeta.getNome());
-					jsonObjectListPlanetas.put("Clima", planeta.getClima());
-					jsonObjectListPlanetas.put("Terreno", planeta.getTerreno());
+					listPlanetas.add(planeta);
 				}
 			});
-			return jsonObjectListPlanetas;
+			
+			List<Planetas> planetasComAparicaoEmFilme = this.buscarAparicoesEmFilmes(listPlanetas);
+			
+			return this.converterParaJson(planetasComAparicaoEmFilme);
 			
 		} catch (IntegrationException e) {
 			throw new BusinessException(e.getMessage(), e);

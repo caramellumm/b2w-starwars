@@ -28,7 +28,7 @@ public class PlanetasRest {
 	@PUT
 	@Path("{nome}/{clima}/{terreno}")
 	@Produces("application/json")
-	public Response inserirPlaneta(@PathParam("nome") String nome, @PathParam("clima") String clima, @PathParam("terreno") String terreno){
+	public Response inserirPlaneta(@PathParam("nome") String nome, @PathParam("clima") String clima, @PathParam("terreno") String terreno) throws Exception{
 		
 		try {
 			PlanetasBusiness pb = new PlanetasBusiness();

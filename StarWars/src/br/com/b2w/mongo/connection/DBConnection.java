@@ -83,7 +83,7 @@ public class DBConnection {
     public FindIterable<Planetas> buscarPlanetasPorNome(String nome) throws IntegrationException {
     	try {
     		MongoCollection<Planetas> collection = this.getCollection();
-    		BasicDBObject query = new BasicDBObject("nome", new BasicDBObject("$gt", nome));
+    		BasicDBObject query = new BasicDBObject("nome", nome);
     		return collection.find(query);
 		} catch (Exception e) {
 			throw new IntegrationException("Erro ao buscarPlanetas por Nome", e);
@@ -94,7 +94,7 @@ public class DBConnection {
     public FindIterable<Planetas> buscarPlanetasPorId(ObjectId id) throws IntegrationException {
     	try {
     		MongoCollection<Planetas> collection = this.getCollection();
-    		BasicDBObject query = new BasicDBObject("_id", new BasicDBObject("$gt", id));
+    		BasicDBObject query = new BasicDBObject("_id", id);
     		return collection.find(query);
 		} catch (Exception e) {
 			throw new IntegrationException("Erro ao buscarPlanetas por ID", e);
@@ -105,7 +105,7 @@ public class DBConnection {
     public DeleteResult removerPlanetaPorNome(String nome) throws IntegrationException {
     	try {
     		MongoCollection<Planetas> collection = this.getCollection();
-    		BasicDBObject query = new BasicDBObject("nome", new BasicDBObject("$gt", nome));
+    		BasicDBObject query = new BasicDBObject("nome", nome);
     		return collection.deleteOne(query);
 		} catch (Exception e) {
 			throw new IntegrationException("Erro ao excluir planeta por nome", e);
