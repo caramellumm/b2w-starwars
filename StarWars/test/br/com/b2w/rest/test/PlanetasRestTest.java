@@ -1,8 +1,6 @@
 package br.com.b2w.rest.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.spy;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
@@ -15,7 +13,6 @@ import org.junit.Test;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse.Status;
-import com.sun.jersey.api.client.WebResource;
 
 import br.com.b2w.rest.PlanetasRest;	
 
