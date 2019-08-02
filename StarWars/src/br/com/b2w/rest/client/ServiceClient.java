@@ -36,7 +36,7 @@ public class ServiceClient {
 			return apiSwarWarsResult.getResults();
 
 		} catch (Exception e) {
-			throw new ServiceException(e.getMessage(), e);
+			throw new ServiceException("Erro ao conectar com a API swapi.co", e);
 		}
 	}
 
