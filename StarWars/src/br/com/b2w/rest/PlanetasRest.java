@@ -16,9 +16,10 @@ import org.bson.types.ObjectId;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.sun.jersey.api.client.ClientResponse.Status;
 
 import br.com.b2w.business.PlanetasBusiness;
-
+	
 @Path("/planetas")
 public class PlanetasRest {
 	
@@ -27,15 +28,15 @@ public class PlanetasRest {
 	@PUT
 	@Path("{nome}/{clima}/{terreno}")
 	@Produces("application/json")
-	public Response inserirPlaneta(@PathParam("nome") String nome, @PathParam("clima") String clima, @PathParam("terreno") String terreno) {
+	public Response inserirPlaneta(@PathParam("nome") String nome, @PathParam("clima") String clima, @PathParam("terreno") String terreno){
 		
 		try {
 			PlanetasBusiness pb = new PlanetasBusiness();
 			JSONObject jsonObject = pb.inserirPlaneta(nome, clima, terreno);
-			return Response.status(200).entity(jsonObject.toString()).build();
+			return Response.status(Status.CREATED).entity(jsonObject.toString()).build();
 			
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao inserir um planeta : " + e.getMessage()).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Erro ao inserir um planeta : " + e.getMessage()).build();
 		}
 	}
 	
@@ -46,9 +47,9 @@ public class PlanetasRest {
 			PlanetasBusiness pb = new PlanetasBusiness();
 			JSONArray jsonObjectListaPlanetas = pb.listarPlanetas();
 			
-			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
+			return Response.status(Status.OK).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao listar os planetas: " + e.getMessage()).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Erro ao listar os planetas: " + e.getMessage()).build();
 		}
 	}
 	
@@ -61,9 +62,9 @@ public class PlanetasRest {
 			PlanetasBusiness pb = new PlanetasBusiness();
 			JSONArray jsonObjectListaPlanetas = pb.listarPlanetas();
 			
-			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
+			return Response.status(Status.OK).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao listar os planetas por nome: " + e.getMessage()).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Erro ao listar os planetas por nome: " + e.getMessage()).build();
 		}
 	}
 	
@@ -77,9 +78,9 @@ public class PlanetasRest {
 			PlanetasBusiness pb = new PlanetasBusiness();
 			JSONObject jsonObjectListaPlanetas = pb.listarPlanetas(id);
 
-			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
+			return Response.status(Status.OK).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao listar os planetas por id: " + e.getMessage()).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Erro ao listar os planetas por id: " + e.getMessage()).build();
 		}
 	}
 	
@@ -92,9 +93,9 @@ public class PlanetasRest {
 			PlanetasBusiness pb = new PlanetasBusiness();
 			JSONObject jsonObjectListaPlanetas = pb.removerPlaneta(id);
 			
-			return Response.status(200).entity(jsonObjectListaPlanetas.toString()).build();
+			return Response.status(Status.OK).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
-			return Response.status(500).entity("Erro ao remover planta: " + e.getMessage()).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Erro ao remover planta: " + e.getMessage()).build();
 		}
 	}
 	

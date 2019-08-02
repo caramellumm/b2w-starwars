@@ -5,7 +5,6 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import com.mongodb.BasicDBObject;
@@ -53,7 +52,7 @@ public class DBConnection {
 		}
     }
     
-    public void closeConnection() throws IntegrationException {
+    public void closeConnection() throws IntegrationException	 {
     	try {
     		mongoClient.close();
 		} catch (Exception e) {

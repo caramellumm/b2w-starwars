@@ -6,6 +6,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.WebResource.Builder;
 
@@ -27,7 +28,7 @@ public class ServiceClient {
 					.header("User-Agent", "").accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON);
 			ClientResponse response = accept.get(ClientResponse.class);
 
-			if (response.getStatus() != 200) {
+			if (response.getStatus() != Status.OK.getStatusCode()) {
 				throw new RuntimeException("Erro ao recuperar dados da API swapi.co: Erro HTTP: " + response.getStatus());
 			}
 			

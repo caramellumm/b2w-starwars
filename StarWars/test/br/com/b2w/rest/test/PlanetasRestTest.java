@@ -1,7 +1,8 @@
 package br.com.b2w.rest.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.spy;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
@@ -11,12 +12,21 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
-import org.mockito.Mock;
 
-import br.com.b2w.exception.BusinessException;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
+
 import br.com.b2w.rest.PlanetasRest;	
 
 public class PlanetasRestTest extends JerseyTest{
+	
+	public static String URL_SERVICE = "http://localhost:9998";
+	public static Client client;
+	
+	  public PlanetasRestTest(){
+		  client = Client.create();
+	  }
+	 
 	
     @Override
     protected Application configure() {
@@ -29,13 +39,16 @@ public class PlanetasRestTest extends JerseyTest{
 		Response response = target("/planetas/Terra/Quente/Montanhoso").request().put(Entity.entity(dados, MediaType.APPLICATION_JSON));
 		assertEquals(200, response.getStatus());
 	}
-    
+    	
 	@Test(expected = Exception.class)
 	public void testErroInserirPlaneta() {
-		PlanetasRest mock = mock(PlanetasRest.class);
-		//doThrow(new Exception()).when(mock).inserirPlaneta("", "", "");
-		when(mock.inserirPlaneta("", "", "")).thenThrow(new Exception("Error occurred"));
-		mock.inserirPlaneta("terra", "teste", "teste");
+		
+		WebResource service = client.resource(URL_SERVICE);
+		WebResource serviceSpy = spy(service);
+		doThrow(Exception.class).when(serviceSpy).post();
+
+		serviceSpy.path("/planetas/Terra/Quente/Montanhoso").accept(MediaType.APPLICATION_JSON).put();
+		
 	}
     
 	@Test

@@ -22,7 +22,7 @@ import br.com.b2w.rest.client.ServiceClient;
 public class PlanetasBusiness {
 
 	
-	public JSONObject inserirPlaneta(String nome, String clima, String terreno) throws IntegrationException, BusinessException {
+	public JSONObject inserirPlaneta(String nome, String clima, String terreno) throws BusinessException, IntegrationException {
 		
 		DBConnection conn = null;
 		try {
@@ -42,7 +42,7 @@ public class PlanetasBusiness {
 			return jsonObjectListPlanetas;
 			
 		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
+			throw new BusinessException("Erro no fluxo de inserir planeta", e);
 		} finally {
 			conn.closeConnection();
 		}
@@ -68,9 +68,11 @@ public class PlanetasBusiness {
 			
 			return this.converterParaJson(planetasComAparicaoEmFilme);
 
-		} catch (Exception e) {
+		} catch (IntegrationException e) {
 			throw new BusinessException(e.getMessage(), e);
 
+		} catch (Exception e) {
+			throw new BusinessException("Erro no fluxo de listar planetas", e);
 		} finally {
 			conn.closeConnection();
 		}
@@ -98,9 +100,11 @@ public class PlanetasBusiness {
 			});
 			return jsonObjectListPlanetas;
 			
-		} catch (Exception e) {
+		} catch (IntegrationException e) {
 			throw new BusinessException(e.getMessage(), e);
 			
+		} catch (Exception e) {
+			throw new BusinessException("Erro no fluxo de listar planetas", e);
 		} finally {
 			conn.closeConnection();
 		}
@@ -128,9 +132,11 @@ public class PlanetasBusiness {
 			});
 			return jsonObjectListPlanetas;
 
-		} catch (Exception e) {
+		} catch (IntegrationException e) {
 			throw new BusinessException(e.getMessage(), e);
 
+		} catch (Exception e) {
+			throw new BusinessException("Erro no fluxo de listar planetas", e);
 		} finally {
 			conn.closeConnection();
 		}
@@ -155,15 +161,16 @@ public class PlanetasBusiness {
 			
 			return jsonObjectListPlanetas;
 			
-		} catch (Exception e) {
+		} catch (IntegrationException e) {
 			throw new BusinessException(e.getMessage(), e);
 			
+		} catch (Exception e) {
+			throw new BusinessException("Erro no fluxo de remover planeta", e);
 		} finally {
 			conn.closeConnection();
 		}
 	}
 	
-	// Sobrescrevendo o retorno dos planetas
 	public List<Planetas> buscarAparicoesEmFilmes(List<Planetas> listPlanetas) throws Exception {
 		try {
 			ServiceClient client = new ServiceClient();
@@ -179,8 +186,11 @@ public class PlanetasBusiness {
 			
 			return listPlanetas;
 			
-		} catch (Exception e) {
+		} catch (ServiceException e) {
 			throw new BusinessException(e.getMessage(), e);
+			
+		}  catch (Exception e) {
+			throw new BusinessException("Erro no fluxo de buscar aparicoes em filmes", e);
 		}
 	}
 	
