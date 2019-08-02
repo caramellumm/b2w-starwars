@@ -171,7 +171,7 @@ public class PlanetasBusiness {
 		}
 	}
 	
-	public List<Planetas> buscarAparicoesEmFilmes(List<Planetas> listPlanetas) throws Exception {
+	public List<Planetas> buscarAparicoesEmFilmes(List<Planetas> listPlanetas) throws BusinessException {
 		try {
 			ServiceClient client = new ServiceClient();
 			List<ApiStarWarsPlanet> consultarPlanetas = client.consultarPlanetas();
