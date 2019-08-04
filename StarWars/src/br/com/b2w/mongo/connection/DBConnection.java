@@ -106,7 +106,7 @@ public class DBConnection {
     	try {
     		MongoCollection<Planetas> collection = this.getCollection();
     		BasicDBObject query = new BasicDBObject("nome", nome);
-    		return collection.deleteOne(query);
+    		return collection.deleteMany(query);
 		} catch (Exception e) {
 			throw new IntegrationException("Erro ao excluir planeta por nome", e);
 		}
