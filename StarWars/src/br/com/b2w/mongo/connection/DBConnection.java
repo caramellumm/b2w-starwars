@@ -2,6 +2,7 @@ package br.com.b2w.mongo.connection;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+import static com.mongodb.client.model.Filters.eq;
 
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -94,8 +95,7 @@ public class DBConnection {
     public FindIterable<Planetas> buscarPlanetasPorId(ObjectId id) throws IntegrationException {
     	try {
     		MongoCollection<Planetas> collection = this.getCollection();
-    		BasicDBObject query = new BasicDBObject("_id", id);
-    		return collection.find(query);
+    		return collection.find(eq("_id", id));
 		} catch (Exception e) {
 			throw new IntegrationException("Erro ao buscarPlanetas por ID", e);
 		}

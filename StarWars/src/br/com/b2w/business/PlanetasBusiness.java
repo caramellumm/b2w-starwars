@@ -116,7 +116,7 @@ public class PlanetasBusiness {
 		DBConnection conn = null;
 		try {
 			conn = new DBConnection();
-			FindIterable<Planetas> buscarPlanetas = conn.buscarPlanetas();
+			FindIterable<Planetas> buscarPlanetas = conn.buscarPlanetasPorId(Id);
 
 			JSONObject jsonObjectListPlanetas = new JSONObject();
 

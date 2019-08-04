@@ -60,7 +60,7 @@ public class PlanetasRest {
 		try {
 			
 			PlanetasBusiness pb = new PlanetasBusiness();
-			JSONArray jsonObjectListaPlanetas = pb.listarPlanetas();
+			JSONArray jsonObjectListaPlanetas = pb.listarPlanetas(nome);
 			
 			return Response.status(Status.OK).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
