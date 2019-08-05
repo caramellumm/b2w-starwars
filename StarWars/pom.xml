@@ -20,6 +20,9 @@
 		<resource>
 			<directory>src</directory>
 		</resource>
+		<resource>
+			<directory>resource</directory>
+		</resource>
 	</resources>
 	<testResources>
 		<testResource>
@@ -29,7 +32,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>3.6.0</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -159,6 +162,30 @@
 			
 			<build>
 				<plugins>
+					<plugin>
+		                <groupId>org.apache.maven.plugins</groupId>
+		                <artifactId>maven-resources-plugin</artifactId>
+		                <version>2.4.3</version>
+			             <executions>
+			                <execution>
+		                        <id>resources</id>
+		                        <!-- here the phase you need -->
+		                        <phase>validate</phase>
+		                        <goals>
+		                            <goal>resources</goal>
+		                        </goals>
+		                        <configuration>
+		                            <outputDirectory>${basedir}/target/conf</outputDirectory>
+		                            <resources>
+		                                <resource>
+		                                    <directory>applconf</directory>
+		                                    <filtering>true</filtering>
+		                                </resource>
+		                            </resources>
+		                        </configuration>
+		                    </execution>
+		                </executions>
+		              </plugin>
 					<!-- Tomcat7 -->
 					<plugin>
 						<groupId>org.apache.tomcat.maven</groupId>
