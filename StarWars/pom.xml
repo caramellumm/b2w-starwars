@@ -4,9 +4,9 @@
   <!-- Padrao para o pom.xml do modulo WEB -->
   <!-- *********************************** -->
   <modelVersion>4.0.0</modelVersion>
-  <groupId>StarWars</groupId>
-  <artifactId>StarWars</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <groupId>starwars</groupId>
+  <artifactId>starwars</artifactId>
+  <version>v1</version>
   <packaging>war</packaging>
   
   
