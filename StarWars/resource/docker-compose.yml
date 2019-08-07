@@ -8,11 +8,11 @@ services:
       - 27017:27017
   tomcat:
     image: tomcat:9.0
-   environment:
+    environment:
       - TOMCAT_USERNAME=admin
       - TOMCAT_PASSWORD=password
-      - CATALINA_BASE=
-      - CATALINA_HOME
+      - CATALINA_BASE=teste
+      - CATALINA_HOME=teste
     volumes:
       - ./war:/usr/local/tomcat/webapps
     ports:

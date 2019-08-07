@@ -9,10 +9,14 @@ import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoClientURI;
+import com.mongodb.MongoDriverInformation;
 import com.mongodb.MongoSocketOpenException;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -27,12 +31,13 @@ public class DBConnection {
 	
 	public DBConnection() throws IntegrationException {
 		try {
-
+			
 			CodecRegistry pojoCodecRegistry = fromRegistries(com.mongodb.MongoClient.getDefaultCodecRegistry(),
 					fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-
-			MongoClientSettings settings = MongoClientSettings.builder().codecRegistry(pojoCodecRegistry).build();
-			mongoClient = MongoClients.create(settings);
+			
+			MongoClientOptions optsWithCodecs = MongoClientOptions.builder().codecRegistry(pojoCodecRegistry).build();
+			mongoClient = new MongoClient(new ServerAddress("172.18.0.2", 27017), optsWithCodecs);
+			
 
 		} catch (MongoSocketOpenException e) {
 			throw new IntegrationException("Erro ao abrir a conexao", e);

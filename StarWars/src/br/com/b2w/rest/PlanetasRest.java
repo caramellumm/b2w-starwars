@@ -64,7 +64,7 @@ public class PlanetasRest {
 			
 			return Response.status(Status.OK).entity(jsonObjectListaPlanetas.toString()).build();
 		} catch (Exception e) {
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Erro ao listar os planetas por nome: " + e.getMessage()).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Erro ao listar os planetas por nome: " + e).build();
 		}
 	}
 	
