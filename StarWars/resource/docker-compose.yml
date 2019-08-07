@@ -1,17 +1,43 @@
 version: '3'
+networks: 
+  banco:
+  server:
+  web:
 services:
+  #Banco de dados
   mongodb:
     image: mongo:3.6.3
-    ports:
-      - 27017:27017
+    networks: 
+      - banco
+
+  #Servidor
   tomcat:
     image: tomcat:9.0.22-jdk8-openjdk
     volumes:
       - ./war:/usr/local/tomcat/webapps
-    ports:
-      - 8080:8080
+    # Necessario que o servidor acesse a rede web para o proxy reverso
+    networks: 
+      - server
+      - banco
+      - web
     depends_on:
-      - mongodb
+      - mongodb 
+      
+  #Proxy reverso
+  frontend:
+    image: nginx:1.13
+    volumes:
+      # Configuração do proxy reverso
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - web
+    depends_on:
+      - tomcat
+
+ 
 
 
 
