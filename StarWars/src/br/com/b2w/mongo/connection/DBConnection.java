@@ -1,8 +1,8 @@
 package br.com.b2w.mongo.connection;
 
+import static com.mongodb.client.model.Filters.eq;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
-import static com.mongodb.client.model.Filters.eq;
 
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -11,13 +11,9 @@ import org.bson.types.ObjectId;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.MongoClientURI;
-import com.mongodb.MongoDriverInformation;
 import com.mongodb.MongoSocketOpenException;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
@@ -45,7 +41,7 @@ public class DBConnection {
 		} catch (Exception e) {
 			throw new IntegrationException("Erro ao abrir a conexao", e);
 		}
-	}
+	}	
     
     public MongoCollection<Planetas> getCollection() throws IntegrationException {
     	try {

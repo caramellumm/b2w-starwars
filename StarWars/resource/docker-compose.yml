@@ -1,24 +1,17 @@
 version: '3'
 services:
-  mongo:
-    image: mongo:3.4
-    volumes:
-      - ./data:/data
+  mongodb:
+    image: mongo:3.6.3
     ports:
-      - 27017:27017
+      - "127.0.0.1:27017:27017"
   tomcat:
-    image: tomcat:9.0
-    environment:
-      - TOMCAT_USERNAME=admin
-      - TOMCAT_PASSWORD=password
-      - CATALINA_BASE=teste
-      - CATALINA_HOME=teste
+    image: tomcat:9.0.22-jdk8-openjdk
     volumes:
       - ./war:/usr/local/tomcat/webapps
     ports:
       - 8080:8080
     depends_on:
-      - mongo
+      - mongodb
 
 
 
