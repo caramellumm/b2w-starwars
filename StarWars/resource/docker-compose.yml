@@ -3,7 +3,7 @@ services:
   mongodb:
     image: mongo:3.6.3
     ports:
-      - "127.0.0.1:27017:27017"
+      - 27017:27017
   tomcat:
     image: tomcat:9.0.22-jdk8-openjdk
     volumes:
