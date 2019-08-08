@@ -37,6 +37,16 @@ services:
     depends_on:
       - tomcat
 
+  #vero o porque do erro
+  #Testes Integrados com maven
+  api-starwars-test:
+    image: maven
+    volumes: 
+      - ./maven:/usr/local/maven
+    command: "cd /usr/local/maven && mvn test"
+    depends_on: 
+      - mongodb
+
  
 
 
