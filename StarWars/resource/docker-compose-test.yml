@@ -1,0 +1,28 @@
+version: '3'
+networks: 
+  banco:
+  maven:
+services:
+  #Banco de dados
+  mongodb:
+    image: mongo:3.6.3
+    networks: 
+      - banco
+
+  #maven
+  maven:
+    image: maven:3.6.0-jdk-8-alpine
+    volumes:
+      # Configuração do proxy reverso
+      - ./maven:/maven
+    command: bash -c "cd /maven && mvn test"
+    networks: 
+      - maven
+      - banco
+    depends_on:
+      - mongodb
+
+ 
+
+
+
