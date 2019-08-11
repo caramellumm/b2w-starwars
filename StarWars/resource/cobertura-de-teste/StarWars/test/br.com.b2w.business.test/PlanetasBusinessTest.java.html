@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>PlanetasBusinessTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">StarWars (11/08/2019 19:33:08)</a> &gt; <a href="../../index.html" class="el_group">StarWars</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.source.html" class="el_package">br.com.b2w.business.test</a> &gt; <span class="el_source">PlanetasBusinessTest.java</span></div><h1>PlanetasBusinessTest.java</h1><pre class="source lang-java linenums">package br.com.b2w.business.test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ws.rs.core.Application;
+
+import org.bson.types.ObjectId;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.JerseyTest;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.mongodb.client.FindIterable;
+
+import br.com.b2w.business.PlanetasBusiness;
+import br.com.b2w.exception.BusinessException;
+import br.com.b2w.exception.IntegrationException;
+import br.com.b2w.mongo.connection.DBConnection;
+import br.com.b2w.mongo.document.Planetas;
+
+<span class="fc" id="L31">public class PlanetasBusinessTest extends JerseyTest{</span>
+	
+<span class="fc" id="L33">	public static String PLANETA_1 = &quot;Terra Teste&quot;;</span>
+<span class="fc" id="L34">	public static String PLANETA_2 = &quot;Jupter Teste&quot;;</span>
+<span class="fc" id="L35">	public static String PLANETA_3 = &quot;Venus Teste&quot;;</span>
+<span class="fc" id="L36">	public static String PLANETA_4 = &quot;Yavin IV&quot;;</span>
+	
+	public static ObjectId P1Id;
+	public static ObjectId P2Id;
+	public static ObjectId P3Id;
+	
+	public static DBConnection connection;
+	
+	public static Planetas planeta1;
+	public static Planetas planeta2;
+<span class="fc" id="L46">	public static Planetas planeta3;</span>
+	
+	@Override
+    protected Application configure() {
+<span class="fc" id="L50">        return new ResourceConfig(PlanetasBusiness.class);</span>
+    }
+	
+	@Before
+	public void inserirMassaParaTestes() throws IntegrationException {
+		
+<span class="fc" id="L56">		connection = new DBConnection();</span>
+		
+<span class="fc" id="L58">		planeta1 = new Planetas();</span>
+<span class="fc" id="L59">		planeta1.setNome(PLANETA_1);</span>
+<span class="fc" id="L60">		planeta1.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L61">		planeta1.setClima(&quot;quente&quot;);</span>
+<span class="fc" id="L62">		connection.inserirPlaneta(planeta1);</span>
+		
+<span class="fc" id="L64">		planeta2 = new Planetas();</span>
+<span class="fc" id="L65">		planeta2.setNome(PLANETA_2);</span>
+<span class="fc" id="L66">		planeta2.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L67">		planeta2.setClima(&quot;quente&quot;);</span>
+<span class="fc" id="L68">		connection.inserirPlaneta(planeta2);</span>
+
+<span class="fc" id="L70">		planeta3 = new Planetas();</span>
+<span class="fc" id="L71">		planeta3.setNome(PLANETA_3);</span>
+<span class="fc" id="L72">		planeta3.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L73">		planeta3.setClima(&quot;quente&quot;);</span>
+<span class="fc" id="L74">		connection.inserirPlaneta(planeta3);</span>
+		
+<span class="fc" id="L76">		FindIterable&lt;Planetas&gt; dadosPlaneta1 = connection.buscarPlanetasPorNome(planeta1.getNome());</span>
+<span class="fc" id="L77">		Planetas p1 = dadosPlaneta1.first();</span>
+<span class="fc" id="L78">		P1Id = p1.getId();</span>
+		
+
+<span class="fc" id="L81">		FindIterable&lt;Planetas&gt; dadosPlaneta2 = connection.buscarPlanetasPorNome(planeta2.getNome());</span>
+<span class="fc" id="L82">		Planetas p2 = dadosPlaneta2.first();</span>
+<span class="fc" id="L83">		P2Id = p2.getId();</span>
+		
+
+<span class="fc" id="L86">		FindIterable&lt;Planetas&gt; dadosPlaneta3 = connection.buscarPlanetasPorNome(planeta3.getNome());</span>
+<span class="fc" id="L87">		Planetas p3 = dadosPlaneta3.first();</span>
+<span class="fc" id="L88">		P3Id = p3.getId();</span>
+		
+<span class="fc" id="L90">	}</span>
+	
+	@After
+	public void removerMassaTeste() throws IntegrationException {
+<span class="fc" id="L94">		connection = new DBConnection();</span>
+<span class="fc" id="L95">		connection.removerPlanetaPorNome(PLANETA_1);</span>
+<span class="fc" id="L96">		connection.removerPlanetaPorNome(PLANETA_2);</span>
+<span class="fc" id="L97">		connection.removerPlanetaPorNome(PLANETA_3);</span>
+<span class="fc" id="L98">		connection.removerPlanetaPorNome(PLANETA_4);</span>
+<span class="fc" id="L99">		connection.removerPlanetaPorNome(&quot;&quot;);</span>
+<span class="fc" id="L100">	}</span>
+	
+	@Test
+	public void testInserirPlaneta() throws BusinessException, IntegrationException {
+<span class="fc" id="L104">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+		
+<span class="fc" id="L106">		JSONObject jsonObjectListPlanetas = new JSONObject();</span>
+<span class="fc" id="L107">		jsonObjectListPlanetas.put(&quot;retorno&quot;, &quot;Insert Efetuado com Sucesso&quot;);</span>
+
+<span class="fc" id="L109">		JSONObject inserirPlaneta = planetasBusiness.inserirPlaneta(planeta1.getNome(), planeta1.getClima(), planeta1.getTerreno());</span>
+<span class="fc" id="L110">		assertEquals(jsonObjectListPlanetas.get(&quot;retorno&quot;), inserirPlaneta.get(&quot;retorno&quot;));</span>
+		
+<span class="fc" id="L112">	}</span>
+	
+	@Test(expected = BusinessException.class)
+	public void testErroInserirPlaneta() throws BusinessException, IntegrationException {
+		
+<span class="fc" id="L117">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L118">		PlanetasBusiness spy = spy(planetasBusiness);</span>
+<span class="fc" id="L119">		when(spy.inserirPlaneta(planeta1.getNome(), planeta1.getClima(), planeta1.getTerreno()))</span>
+<span class="fc" id="L120">		.thenThrow(new BusinessException(&quot;Erro no fluxo de inserir planeta&quot;, new Exception()))</span>
+<span class="fc" id="L121">		.thenThrow(new IntegrationException(&quot;Erro no fluxo de inserir planeta&quot;, new Exception())).thenCallRealMethod();</span>
+<span class="nc" id="L122">		spy.inserirPlaneta(planeta1.getNome(), planeta1.getClima(), planeta1.getTerreno());	</span>
+		
+<span class="nc" id="L124">	}</span>
+	
+	@Test
+	public void testListarPlanetas() throws IntegrationException, BusinessException {
+<span class="fc" id="L128">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L129">		JSONArray listarPlanetas = planetasBusiness.listarPlanetas();</span>
+<span class="fc" id="L130">		assertNotNull(listarPlanetas);</span>
+
+<span class="fc" id="L132">	}</span>
+	
+	@Test(expected = BusinessException.class)
+	public void testErroListarPlanetas() throws IntegrationException, BusinessException {
+<span class="fc" id="L136">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L137">		PlanetasBusiness spy = spy(planetasBusiness);</span>
+<span class="fc" id="L138">		when(spy.listarPlanetas())</span>
+<span class="fc" id="L139">		.thenThrow(new BusinessException(&quot;Erro no fluxo de listar planetas&quot;, new Exception()))</span>
+<span class="fc" id="L140">		.thenThrow(new IntegrationException(&quot;Erro no fluxo de listar planetas&quot;, new Exception()));</span>
+<span class="nc" id="L141">		spy.listarPlanetas();</span>
+<span class="nc" id="L142">	}</span>
+	
+	@Test
+	public void testListarPlanetasPorNome() throws BusinessException, IntegrationException {
+<span class="fc" id="L146">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L147">		JSONArray listarPlanetas = planetasBusiness.listarPlanetas(PLANETA_1);</span>
+<span class="fc" id="L148">		assertNotNull(listarPlanetas);</span>
+<span class="fc" id="L149">	}</span>
+	
+	@Test(expected = BusinessException.class)
+	public void testErroListarPlanetasPorNome() throws BusinessException, IntegrationException {
+<span class="fc" id="L153">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L154">		PlanetasBusiness spy = spy(planetasBusiness);</span>
+<span class="fc" id="L155">		when(spy.listarPlanetas(anyString()))</span>
+<span class="fc" id="L156">		.thenThrow(new BusinessException(&quot;Erro no fluxo de listar planetas&quot;, new Exception()))</span>
+<span class="fc" id="L157">		.thenThrow(new IntegrationException(&quot;Erro no fluxo de listar planetas&quot;, new Exception()));</span>
+<span class="nc" id="L158">		spy.listarPlanetas(PLANETA_1);</span>
+<span class="nc" id="L159">	}</span>
+	
+	@Test
+	public void testListarPlanetasPorId() throws BusinessException, IntegrationException {
+<span class="fc" id="L163">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L164">		JSONObject listarPlanetas = planetasBusiness.listarPlanetas(P1Id);</span>
+<span class="fc" id="L165">		assertNotNull(listarPlanetas);</span>
+<span class="fc" id="L166">	}</span>
+	
+	
+	@Test(expected = BusinessException.class)
+	public void testErroListarPlanetasPorId() throws BusinessException, IntegrationException {
+<span class="fc" id="L171">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L172">		PlanetasBusiness spy = spy(planetasBusiness);</span>
+<span class="fc" id="L173">		when( spy.listarPlanetas(any(ObjectId.class)) )</span>
+<span class="fc" id="L174">		.thenThrow(new BusinessException(&quot;Erro no fluxo de listar planetas&quot;, new Exception()))</span>
+<span class="fc" id="L175">		.thenThrow(new IntegrationException(&quot;Erro no fluxo de listar planetas&quot;, new Exception()));</span>
+<span class="nc" id="L176">		 spy.listarPlanetas(P1Id);</span>
+<span class="nc" id="L177">	}</span>
+	
+	@Test
+	public void testRemoverPlaneta() throws BusinessException, IntegrationException {
+<span class="fc" id="L181">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L182">		JSONObject removerPlaneta = planetasBusiness.removerPlaneta(P2Id.toString());</span>
+<span class="fc" id="L183">		JSONObject jsonObjectListPlanetas = new JSONObject();</span>
+<span class="fc" id="L184">		jsonObjectListPlanetas.put(&quot;retorno&quot;, &quot;Documento deletado com Sucesso&quot;);</span>
+<span class="fc" id="L185">		assertEquals(jsonObjectListPlanetas.get(&quot;retorno&quot;), removerPlaneta.get(&quot;retorno&quot;));</span>
+		
+<span class="fc" id="L187">	}</span>
+	
+	@Test(expected = BusinessException.class)
+	public void testErroRemoverPlaneta() throws BusinessException, IntegrationException {
+<span class="fc" id="L191">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="nc" id="L192">		planetasBusiness.removerPlaneta(&quot;5d432dd386b70577&quot;);</span>
+<span class="nc" id="L193">	}</span>
+	
+	@Test(expected = BusinessException.class)
+	public void testErroRemoverPlaneta2() throws BusinessException, IntegrationException {
+<span class="fc" id="L197">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L198">		PlanetasBusiness spy = spy(planetasBusiness);</span>
+<span class="fc" id="L199">		String id = &quot;5d432dd386b70577b5edb8fb&quot;;</span>
+<span class="fc" id="L200">		when(spy.removerPlaneta(id))</span>
+<span class="fc" id="L201">		.thenThrow(new BusinessException(&quot;Erro no fluxo de remover planetas&quot;, new Exception()))</span>
+<span class="fc" id="L202">		.thenThrow(new IntegrationException(&quot;Erro no fluxo de remover planetas&quot;, new Exception()));</span>
+<span class="nc" id="L203">		spy.removerPlaneta(id);</span>
+<span class="nc" id="L204">	}</span>
+	
+	@Test
+	public void testBuscarAparicoesEmFilmes() throws Exception {
+<span class="fc" id="L208">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L209">		List&lt;Planetas&gt; listPlanetas = new ArrayList&lt;Planetas&gt;();</span>
+<span class="fc" id="L210">		Planetas planeta = new Planetas();</span>
+<span class="fc" id="L211">		planeta.setNome(PLANETA_4);</span>
+<span class="fc" id="L212">		planeta.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L213">		planeta.setClima(&quot;quente&quot;);</span>
+<span class="fc" id="L214">		listPlanetas.add(planeta);</span>
+<span class="fc" id="L215">		List&lt;Planetas&gt; buscarAparicoesEmFilmes = planetasBusiness.buscarAparicoesEmFilmes(listPlanetas);</span>
+<span class="fc" id="L216">		assertNotNull(buscarAparicoesEmFilmes.get(0));</span>
+		
+<span class="fc" id="L218">	}</span>
+	
+	@Test(expected = BusinessException.class)
+	public void testErroBuscarAparicoesEmFilmes() throws Exception {
+<span class="fc" id="L222">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L223">		PlanetasBusiness spy = spy(planetasBusiness);</span>
+<span class="fc" id="L224">		when(spy.buscarAparicoesEmFilmes(anyListOf(Planetas.class)))</span>
+<span class="fc" id="L225">		.thenThrow(new BusinessException(&quot;Erro no fluxo de buscar filmes&quot;, new Exception()));</span>
+		
+<span class="fc" id="L227">		List&lt;Planetas&gt; listPlanetas = new ArrayList&lt;Planetas&gt;();</span>
+<span class="fc" id="L228">		Planetas planeta = new Planetas();</span>
+<span class="fc" id="L229">		planeta.setNome(PLANETA_4);</span>
+<span class="fc" id="L230">		planeta.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L231">		planeta.setClima(&quot;quente&quot;);</span>
+<span class="fc" id="L232">		listPlanetas.add(planeta);</span>
+
+<span class="nc" id="L234">		spy.buscarAparicoesEmFilmes(listPlanetas);</span>
+		
+<span class="nc" id="L236">	}</span>
+	
+	@Test
+	public void testConverterParaJson() throws BusinessException {
+<span class="fc" id="L240">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L241">		List&lt;Planetas&gt; listPlanetas = new ArrayList&lt;Planetas&gt;();</span>
+<span class="fc" id="L242">		Planetas planeta = new Planetas();</span>
+<span class="fc" id="L243">		planeta.setNome(PLANETA_4);</span>
+<span class="fc" id="L244">		planeta.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L245">		planeta.setClima(&quot;quente&quot;);</span>
+		
+<span class="fc" id="L247">		String filme = &quot;https://swapi.co/api/films/1/&quot;;</span>
+<span class="fc" id="L248">		List&lt;String&gt; filmes = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L249">		filmes.add(filme);</span>
+		
+<span class="fc" id="L251">		planeta.setFilmes(filmes);</span>
+<span class="fc" id="L252">		listPlanetas.add(planeta);</span>
+		
+<span class="fc" id="L254">		JSONArray converterParaJson = planetasBusiness.converterParaJson(listPlanetas);</span>
+<span class="fc" id="L255">		assertNotNull(converterParaJson);</span>
+<span class="fc" id="L256">	}</span>
+	
+	@Test(expected = BusinessException.class)
+	public void testErroConverterParaJson() throws BusinessException {
+<span class="fc" id="L260">		PlanetasBusiness planetasBusiness = new PlanetasBusiness();</span>
+<span class="fc" id="L261">		PlanetasBusiness spy = spy(planetasBusiness);</span>
+<span class="fc" id="L262">		when(spy.converterParaJson(anyListOf(Planetas.class)))</span>
+<span class="fc" id="L263">		.thenThrow(new BusinessException(&quot;Erro no fluxo de converter para Json&quot;, new Exception()));</span>
+		
+<span class="fc" id="L265">		List&lt;Planetas&gt; listPlanetas = new ArrayList&lt;Planetas&gt;();</span>
+<span class="fc" id="L266">		Planetas planeta = new Planetas();</span>
+<span class="fc" id="L267">		planeta.setNome(PLANETA_4);</span>
+<span class="fc" id="L268">		planeta.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L269">		planeta.setClima(&quot;quente&quot;);</span>
+		
+<span class="fc" id="L271">		String filme = &quot;https://swapi.co/api/films/1/&quot;;</span>
+<span class="fc" id="L272">		List&lt;String&gt; filmes = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L273">		filmes.add(filme);</span>
+		
+<span class="fc" id="L275">		planeta.setFilmes(filmes);</span>
+<span class="fc" id="L276">		listPlanetas.add(planeta);</span>
+		
+<span class="nc" id="L278">		spy.converterParaJson(listPlanetas);</span>
+		
+<span class="nc" id="L280">	}</span>
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>StarWars (11/08/2019 19:33:08)</div></body></html>

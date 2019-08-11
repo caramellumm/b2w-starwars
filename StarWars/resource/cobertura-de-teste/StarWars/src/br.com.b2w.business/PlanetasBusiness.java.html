@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>PlanetasBusiness.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">StarWars (11/08/2019 19:33:08)</a> &gt; <a href="../../index.html" class="el_group">StarWars</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">br.com.b2w.business</a> &gt; <span class="el_source">PlanetasBusiness.java</span></div><h1>PlanetasBusiness.java</h1><pre class="source lang-java linenums">package br.com.b2w.business;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.Consumer;
+
+import org.bson.types.ObjectId;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.result.DeleteResult;
+
+import br.com.b2w.exception.BusinessException;
+import br.com.b2w.exception.IntegrationException;
+import br.com.b2w.exception.ServiceException;
+import br.com.b2w.mongo.connection.DBConnection;
+import br.com.b2w.mongo.document.Planetas;
+import br.com.b2w.rest.client.ServiceClient;
+
+<span class="fc" id="L22">public class PlanetasBusiness {</span>
+
+	
+	public JSONObject inserirPlaneta(String nome, String clima, String terreno) throws BusinessException, IntegrationException {
+		
+<span class="fc" id="L27">		DBConnection conn = null;</span>
+		try {
+<span class="fc" id="L29">			conn = new DBConnection();</span>
+			
+<span class="fc" id="L31">			Planetas planeta = new Planetas();</span>
+<span class="fc" id="L32">			planeta.setNome(nome);</span>
+<span class="fc" id="L33">			planeta.setClima(clima);</span>
+<span class="fc" id="L34">			planeta.setTerreno(terreno);</span>
+			
+<span class="fc" id="L36">			conn.inserirPlaneta(planeta);</span>
+			
+<span class="fc" id="L38">			JSONObject jsonObjectListPlanetas = new JSONObject();</span>
+			
+<span class="fc" id="L40">			jsonObjectListPlanetas.put(&quot;retorno&quot;, &quot;Insert Efetuado com Sucesso&quot;);</span>
+			
+<span class="fc" id="L42">			return jsonObjectListPlanetas;</span>
+			
+<span class="nc" id="L44">		} catch (Exception e) {</span>
+<span class="nc" id="L45">			throw new BusinessException(&quot;Erro no fluxo de inserir planeta&quot;, e);</span>
+		} finally {
+<span class="fc" id="L47">			conn.closeConnection();</span>
+		}
+	}
+	
+	public JSONArray listarPlanetas() throws IntegrationException, BusinessException {
+<span class="fc" id="L52">		DBConnection conn = null;</span>
+		try {
+<span class="fc" id="L54">			conn = new DBConnection();</span>
+<span class="fc" id="L55">			FindIterable&lt;Planetas&gt; buscarPlanetas = conn.buscarPlanetas();</span>
+
+<span class="fc" id="L57">			List&lt;Planetas&gt; listPlanetas = new ArrayList&lt;Planetas&gt;();</span>
+
+<span class="fc" id="L59">			buscarPlanetas.forEach(new Consumer&lt;Planetas&gt;() {</span>
+
+				@Override
+				public void accept(Planetas planeta) {
+<span class="fc" id="L63">					listPlanetas.add(planeta);</span>
+<span class="fc" id="L64">				}</span>
+			});
+			
+<span class="fc" id="L67">			List&lt;Planetas&gt; planetasComAparicaoEmFilme = this.buscarAparicoesEmFilmes(listPlanetas);</span>
+			
+<span class="fc" id="L69">			return this.converterParaJson(planetasComAparicaoEmFilme);</span>
+
+<span class="nc" id="L71">		} catch (IntegrationException e) {</span>
+<span class="nc" id="L72">			throw new BusinessException(e.getMessage(), e);</span>
+
+<span class="nc" id="L74">		} catch (Exception e) {</span>
+<span class="nc" id="L75">			throw new BusinessException(&quot;Erro no fluxo de listar planetas&quot;, e);</span>
+		} finally {
+<span class="fc" id="L77">			conn.closeConnection();</span>
+		}
+
+	}
+	
+	public JSONArray listarPlanetas(String nome) throws BusinessException, IntegrationException{
+		
+<span class="fc" id="L84">		DBConnection conn = null;</span>
+		try {
+<span class="fc" id="L86">			conn = new DBConnection();</span>
+<span class="fc" id="L87">			FindIterable&lt;Planetas&gt; buscarPlanetas = conn.buscarPlanetasPorNome(nome);</span>
+			
+<span class="fc" id="L89">			List&lt;Planetas&gt; listPlanetas = new ArrayList&lt;Planetas&gt;();</span>
+
+<span class="fc" id="L91">			buscarPlanetas.forEach(new Consumer&lt;Planetas&gt;() {</span>
+
+				@Override
+				public void accept(Planetas planeta) {
+<span class="fc" id="L95">					listPlanetas.add(planeta);</span>
+<span class="fc" id="L96">				}</span>
+			});
+			
+<span class="fc" id="L99">			List&lt;Planetas&gt; planetasComAparicaoEmFilme = this.buscarAparicoesEmFilmes(listPlanetas);</span>
+			
+<span class="fc" id="L101">			return this.converterParaJson(planetasComAparicaoEmFilme);</span>
+			
+<span class="nc" id="L103">		} catch (IntegrationException e) {</span>
+<span class="nc" id="L104">			throw new BusinessException(e.getMessage(), e);</span>
+			
+<span class="nc" id="L106">		} catch (Exception e) {</span>
+<span class="nc" id="L107">			throw new BusinessException(&quot;Erro no fluxo de listar planetas&quot;, e);</span>
+		} finally {
+<span class="fc" id="L109">			conn.closeConnection();</span>
+		}
+		
+	}
+	
+	public JSONObject listarPlanetas(ObjectId Id) throws BusinessException, IntegrationException {
+
+<span class="fc" id="L116">		DBConnection conn = null;</span>
+		try {
+<span class="fc" id="L118">			conn = new DBConnection();</span>
+<span class="fc" id="L119">			FindIterable&lt;Planetas&gt; buscarPlanetas = conn.buscarPlanetasPorId(Id);</span>
+
+<span class="fc" id="L121">			JSONObject jsonObjectListPlanetas = new JSONObject();</span>
+
+<span class="fc" id="L123">			buscarPlanetas.forEach(new Consumer&lt;Planetas&gt;() {</span>
+
+				@Override
+				public void accept(Planetas planeta) {
+<span class="fc" id="L127">					jsonObjectListPlanetas.put(&quot;Id&quot;, planeta.getId());</span>
+<span class="fc" id="L128">					jsonObjectListPlanetas.put(&quot;Nome&quot;, planeta.getNome());</span>
+<span class="fc" id="L129">					jsonObjectListPlanetas.put(&quot;Clima&quot;, planeta.getClima());</span>
+<span class="fc" id="L130">					jsonObjectListPlanetas.put(&quot;Terreno&quot;, planeta.getTerreno());</span>
+<span class="fc" id="L131">				}</span>
+			});
+<span class="fc" id="L133">			return jsonObjectListPlanetas;</span>
+
+<span class="nc" id="L135">		} catch (IntegrationException e) {</span>
+<span class="nc" id="L136">			throw new BusinessException(e.getMessage(), e);</span>
+
+<span class="nc" id="L138">		} catch (Exception e) {</span>
+<span class="nc" id="L139">			throw new BusinessException(&quot;Erro no fluxo de listar planetas&quot;, e);</span>
+		} finally {
+<span class="fc" id="L141">			conn.closeConnection();</span>
+		}
+
+	}
+	
+	public JSONObject removerPlaneta(String id) throws BusinessException, IntegrationException {
+
+<span class="fc" id="L148">		DBConnection conn = null;</span>
+		try {
+
+<span class="fc" id="L151">			conn = new DBConnection();</span>
+<span class="fc" id="L152">			DeleteResult resultado = conn.removerPlanetaPorID(id);</span>
+<span class="fc" id="L153">			JSONObject jsonObjectListPlanetas = new JSONObject();</span>
+			
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">			if(resultado.wasAcknowledged()) {</span>
+<span class="fc" id="L156">				jsonObjectListPlanetas.put(&quot;retorno&quot;, &quot;Documento deletado com Sucesso&quot;);</span>
+<span class="fc" id="L157">				jsonObjectListPlanetas.put(&quot;Numero de Documentos Deletados&quot;, resultado.getDeletedCount());</span>
+<span class="fc" id="L158">			} else {</span>
+<span class="nc" id="L159">				jsonObjectListPlanetas.put(&quot;retorno&quot;, &quot;Nenhum documento deletado&quot;);</span>
+			}
+			
+<span class="fc" id="L162">			return jsonObjectListPlanetas;</span>
+			
+<span class="fc" id="L164">		} catch (IntegrationException e) {</span>
+<span class="fc" id="L165">			throw new BusinessException(e.getMessage(), e);</span>
+			
+<span class="nc" id="L167">		} catch (Exception e) {</span>
+<span class="nc" id="L168">			throw new BusinessException(&quot;Erro no fluxo de remover planeta&quot;, e);</span>
+		} finally {
+<span class="fc" id="L170">			conn.closeConnection();</span>
+		}
+	}
+	
+	public List&lt;Planetas&gt; buscarAparicoesEmFilmes(List&lt;Planetas&gt; listPlanetas) throws BusinessException {
+		try {
+<span class="fc" id="L176">			ServiceClient client = new ServiceClient();</span>
+<span class="fc" id="L177">			HashMap&lt;String, List&lt;String&gt;&gt; consultarPlanetas = client.consultarPlanetas();</span>
+			
+<span class="fc bfc" id="L179" title="All 2 branches covered.">			for (Planetas planeta : listPlanetas) {</span>
+<span class="fc" id="L180">				List&lt;String&gt; listFilms = consultarPlanetas.get(planeta.getNome());</span>
+<span class="pc bpc" id="L181" title="1 of 4 branches missed.">				if(null != listFilms &amp;&amp; listFilms.size() &gt; 0) {</span>
+<span class="fc" id="L182">					planeta.setFilmes(listFilms);</span>
+				}
+			}
+			
+<span class="fc" id="L186">			return listPlanetas;</span>
+			
+<span class="nc" id="L188">		} catch (ServiceException e) {</span>
+<span class="nc" id="L189">			throw new BusinessException(e.getMessage(), e);</span>
+			
+<span class="nc" id="L191">		}  catch (Exception e) {</span>
+<span class="nc" id="L192">			throw new BusinessException(&quot;Erro no fluxo de buscar aparicoes em filmes&quot;, e);</span>
+		}
+	}
+	
+	public JSONArray converterParaJson(List&lt;Planetas&gt; planetas) throws BusinessException {
+		try {
+			
+<span class="fc" id="L199">			JSONArray jsonArrayPlanetas = new JSONArray();</span>
+			JSONObject jsonObjectListPlanetas;
+			
+<span class="fc bfc" id="L202" title="All 2 branches covered.">			for (Planetas planeta : planetas) {</span>
+<span class="fc" id="L203">				jsonObjectListPlanetas = new JSONObject();</span>
+<span class="fc" id="L204">				jsonObjectListPlanetas.put(&quot;Id&quot;, planeta.getId());</span>
+<span class="fc" id="L205">				jsonObjectListPlanetas.put(&quot;Nome&quot;, planeta.getNome());</span>
+<span class="fc" id="L206">				jsonObjectListPlanetas.put(&quot;Clima&quot;, planeta.getClima());</span>
+<span class="fc" id="L207">				jsonObjectListPlanetas.put(&quot;Terreno&quot;, planeta.getTerreno());</span>
+<span class="fc" id="L208">				jsonObjectListPlanetas.put(&quot;Filmes&quot;, planeta.getFilmes());</span>
+<span class="fc" id="L209">				jsonArrayPlanetas.put(jsonObjectListPlanetas);</span>
+			}
+			
+<span class="fc" id="L212">			return jsonArrayPlanetas;</span>
+			
+<span class="nc" id="L214">		} catch (Exception e) {</span>
+<span class="nc" id="L215">			throw new BusinessException(e.getMessage(), e);</span>
+		}
+	}
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>StarWars (11/08/2019 19:33:08)</div></body></html>

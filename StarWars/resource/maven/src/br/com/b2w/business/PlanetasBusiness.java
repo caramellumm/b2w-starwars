@@ -1,6 +1,7 @@
 package br.com.b2w.business;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -15,7 +16,6 @@ import br.com.b2w.exception.BusinessException;
 import br.com.b2w.exception.IntegrationException;
 import br.com.b2w.exception.ServiceException;
 import br.com.b2w.mongo.connection.DBConnection;
-import br.com.b2w.mongo.document.ApiStarWarsPlanet;
 import br.com.b2w.mongo.document.Planetas;
 import br.com.b2w.rest.client.ServiceClient;
 
@@ -174,13 +174,12 @@ public class PlanetasBusiness {
 	public List<Planetas> buscarAparicoesEmFilmes(List<Planetas> listPlanetas) throws BusinessException {
 		try {
 			ServiceClient client = new ServiceClient();
-			List<ApiStarWarsPlanet> consultarPlanetas = client.consultarPlanetas();
+			HashMap<String, List<String>> consultarPlanetas = client.consultarPlanetas();
 			
 			for (Planetas planeta : listPlanetas) {
-				for (ApiStarWarsPlanet planetApiStarWars : consultarPlanetas) {
-					if(planetApiStarWars.getName().equals(planeta.getNome())){
-						planeta.setFilmes(planetApiStarWars.getFilms());
-					}
+				List<String> listFilms = consultarPlanetas.get(planeta.getNome());
+				if(null != listFilms && listFilms.size() > 0) {
+					planeta.setFilmes(listFilms);
 				}
 			}
 			

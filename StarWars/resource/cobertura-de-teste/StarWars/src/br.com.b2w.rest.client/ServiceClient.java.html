@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ServiceClient.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">StarWars (11/08/2019 19:33:08)</a> &gt; <a href="../../index.html" class="el_group">StarWars</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">br.com.b2w.rest.client</a> &gt; <span class="el_source">ServiceClient.java</span></div><h1>ServiceClient.java</h1><pre class="source lang-java linenums">package br.com.b2w.rest.client;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.ws.rs.core.MediaType;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.ClientResponse.Status;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.WebResource.Builder;
+
+import br.com.b2w.exception.ServiceException;
+import br.com.b2w.mongo.document.ApiStarWarsPlanet;
+import br.com.b2w.mongo.document.ApiSwarWarsResult;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.PersistenceConfiguration;
+import net.sf.ehcache.config.PersistenceConfiguration.Strategy;
+import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
+
+<span class="fc" id="L25">public class ServiceClient {</span>
+
+	private static final String URL_SERVICE = &quot;https://swapi.co/api/planets/&quot;;
+	private static final String OBJETO_CACHEADO = &quot;OBJETO_CACHEADO&quot;;
+	private static final String OBJETO_SWAPI = &quot;swapi&quot;;
+
+	public HashMap&lt;String, List&lt;String&gt;&gt; consultarPlanetas() throws ServiceException {
+
+		try {
+
+<span class="fc" id="L35">			boolean cacheExists = CacheManager.getInstance().cacheExists(OBJETO_CACHEADO);</span>
+
+<span class="fc bfc" id="L37" title="All 2 branches covered.">			if (!cacheExists) {</span>
+								
+<span class="fc" id="L39">				ApiSwarWarsResult apiSwarWarsResult = getPlanets();</span>
+<span class="fc" id="L40">				HashMap&lt;String, List&lt;String&gt;&gt; mapPlanetas = listaParaMap(apiSwarWarsResult.getResults());</span>
+<span class="fc" id="L41">				Cache cache = new Cache(new CacheConfiguration(OBJETO_CACHEADO, 5000).memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU)</span>
+<span class="fc" id="L42">						.eternal(false).timeToLiveSeconds(60).timeToIdleSeconds(90).persistence(new PersistenceConfiguration().strategy(Strategy.NONE)));</span>
+				
+<span class="fc" id="L44">				CacheManager.getInstance().addCache(cache);</span>
+<span class="fc" id="L45">				CacheManager.getInstance().getCache(OBJETO_CACHEADO).put(new Element(OBJETO_SWAPI, mapPlanetas));</span>
+				
+<span class="fc" id="L47">				return mapPlanetas;</span>
+				
+			} else {
+<span class="fc" id="L50">				Element element = CacheManager.getInstance().getCache(OBJETO_CACHEADO).get(OBJETO_SWAPI);</span>
+				
+<span class="fc bfc" id="L52" title="All 2 branches covered.">				if(null == element) {</span>
+<span class="fc" id="L53">					ApiSwarWarsResult apiSwarWarsResult = getPlanets();</span>
+<span class="fc" id="L54">					HashMap&lt;String, List&lt;String&gt;&gt; mapPlanetas = listaParaMap(apiSwarWarsResult.getResults());</span>
+<span class="fc" id="L55">					CacheManager.getInstance().getCache(OBJETO_CACHEADO).put(new Element(OBJETO_SWAPI, mapPlanetas));</span>
+<span class="fc" id="L56">					element = CacheManager.getInstance().getCache(OBJETO_CACHEADO).get(OBJETO_SWAPI);</span>
+				}
+				
+<span class="fc" id="L59">				HashMap&lt;String, List&lt;String&gt;&gt; mapPlanetas = (HashMap&lt;String, List&lt;String&gt;&gt;) element.getObjectValue();</span>
+<span class="fc" id="L60">				return mapPlanetas;</span>
+				
+			}
+
+<span class="nc" id="L64">		} catch (Exception e) {</span>
+<span class="nc" id="L65">			throw new ServiceException(&quot;Erro ao conectar com a API swapi.co&quot;, e);</span>
+		}
+	}
+	
+	private ApiSwarWarsResult getPlanets() throws ServiceException {
+		
+		try {
+			
+<span class="fc" id="L73">			Client client = Client.create();</span>
+<span class="fc" id="L74">			WebResource webResource = client.resource(URL_SERVICE);</span>
+<span class="fc" id="L75">			Builder accept = webResource.header(&quot;Content-Type&quot;, &quot;application/x-www-form-urlencoded&quot;)</span>
+<span class="fc" id="L76">					.header(&quot;User-Agent&quot;, &quot;&quot;).accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON);</span>
+<span class="fc" id="L77">			ClientResponse response = accept.get(ClientResponse.class);</span>
+			
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">			if (response.getStatus() != Status.OK.getStatusCode()) {</span>
+<span class="nc" id="L80">				throw new RuntimeException(</span>
+<span class="nc" id="L81">						&quot;Erro ao recuperar dados da API swapi.co: Erro HTTP: &quot; + response.getStatus());</span>
+			}
+			
+<span class="fc" id="L84">			ApiSwarWarsResult apiSwarWarsResult = response.getEntity(ApiSwarWarsResult.class);</span>
+			
+<span class="fc" id="L86">			return apiSwarWarsResult;</span>
+<span class="nc" id="L87">		} catch (Exception e) {</span>
+<span class="nc" id="L88">			throw new ServiceException(e);</span>
+		}
+		
+	}
+	
+	
+	private HashMap&lt;String, List&lt;String&gt;&gt; listaParaMap(List&lt;ApiStarWarsPlanet&gt; list){
+		
+<span class="fc" id="L96">		HashMap&lt;String, List&lt;String&gt;&gt; mapFilmes = new HashMap&lt;String, List&lt;String&gt;&gt;();</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">		for (ApiStarWarsPlanet apiStarWarsPlanet : list) {</span>
+<span class="fc" id="L98">			mapFilmes.put(apiStarWarsPlanet.getName(), apiStarWarsPlanet.getFilms());</span>
+		}
+		
+<span class="fc" id="L101">		return mapFilmes;</span>
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>StarWars (11/08/2019 19:33:08)</div></body></html>

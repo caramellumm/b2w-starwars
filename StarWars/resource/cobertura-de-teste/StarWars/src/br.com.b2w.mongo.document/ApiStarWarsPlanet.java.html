@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ApiStarWarsPlanet.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">StarWars (11/08/2019 19:33:08)</a> &gt; <a href="../../index.html" class="el_group">StarWars</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">br.com.b2w.mongo.document</a> &gt; <span class="el_source">ApiStarWarsPlanet.java</span></div><h1>ApiStarWarsPlanet.java</h1><pre class="source lang-java linenums">package br.com.b2w.mongo.document;
+
+import java.io.Serializable;
+import java.util.List;
+
+<span class="fc" id="L6">public class ApiStarWarsPlanet implements Serializable{</span>
+	
+	 /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7088587525760452823L;
+	private String name;
+	 private String rotation_period;
+	 private String orbital_period;
+	 private String diameter;
+	 private String climate;
+	 private String gravity;
+	 private String terrain;
+	 private String surface_water;
+	 private String population;
+	 List&lt;String&gt; residents;
+	 List &lt;String&gt; films;
+	 private String created;
+	 private String edited;
+	 private String url;
+	 
+	public String getName() {
+<span class="fc" id="L28">		return name;</span>
+	}
+	public void setName(String name) {
+<span class="fc" id="L31">		this.name = name;</span>
+<span class="fc" id="L32">	}</span>
+	public String getRotation_period() {
+<span class="nc" id="L34">		return rotation_period;</span>
+	}
+	public void setRotation_period(String rotation_period) {
+<span class="fc" id="L37">		this.rotation_period = rotation_period;</span>
+<span class="fc" id="L38">	}</span>
+	public String getOrbital_period() {
+<span class="nc" id="L40">		return orbital_period;</span>
+	}
+	public void setOrbital_period(String orbital_period) {
+<span class="fc" id="L43">		this.orbital_period = orbital_period;</span>
+<span class="fc" id="L44">	}</span>
+	public String getDiameter() {
+<span class="nc" id="L46">		return diameter;</span>
+	}
+	public void setDiameter(String diameter) {
+<span class="fc" id="L49">		this.diameter = diameter;</span>
+<span class="fc" id="L50">	}</span>
+	public String getClimate() {
+<span class="nc" id="L52">		return climate;</span>
+	}
+	public void setClimate(String climate) {
+<span class="fc" id="L55">		this.climate = climate;</span>
+<span class="fc" id="L56">	}</span>
+	public String getGravity() {
+<span class="nc" id="L58">		return gravity;</span>
+	}
+	public void setGravity(String gravity) {
+<span class="fc" id="L61">		this.gravity = gravity;</span>
+<span class="fc" id="L62">	}</span>
+	public String getTerrain() {
+<span class="nc" id="L64">		return terrain;</span>
+	}
+	public void setTerrain(String terrain) {
+<span class="fc" id="L67">		this.terrain = terrain;</span>
+<span class="fc" id="L68">	}</span>
+	public String getSurface_water() {
+<span class="nc" id="L70">		return surface_water;</span>
+	}
+	public void setSurface_water(String surface_water) {
+<span class="fc" id="L73">		this.surface_water = surface_water;</span>
+<span class="fc" id="L74">	}</span>
+	public String getPopulation() {
+<span class="nc" id="L76">		return population;</span>
+	}
+	public void setPopulation(String population) {
+<span class="fc" id="L79">		this.population = population;</span>
+<span class="fc" id="L80">	}</span>
+	public List&lt;String&gt; getResidents() {
+<span class="nc" id="L82">		return residents;</span>
+	}
+	public void setResidents(List&lt;String&gt; residents) {
+<span class="fc" id="L85">		this.residents = residents;</span>
+<span class="fc" id="L86">	}</span>
+	public List&lt;String&gt; getFilms() {
+<span class="fc" id="L88">		return films;</span>
+	}
+	public void setFilms(List&lt;String&gt; films) {
+<span class="fc" id="L91">		this.films = films;</span>
+<span class="fc" id="L92">	}</span>
+	public String getCreated() {
+<span class="nc" id="L94">		return created;</span>
+	}
+	public void setCreated(String created) {
+<span class="fc" id="L97">		this.created = created;</span>
+<span class="fc" id="L98">	}</span>
+	public String getEdited() {
+<span class="nc" id="L100">		return edited;</span>
+	}
+	public void setEdited(String edited) {
+<span class="fc" id="L103">		this.edited = edited;</span>
+<span class="fc" id="L104">	}</span>
+	public String getUrl() {
+<span class="nc" id="L106">		return url;</span>
+	}
+	public void setUrl(String url) {
+<span class="fc" id="L109">		this.url = url;</span>
+<span class="fc" id="L110">	}</span>
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>StarWars (11/08/2019 19:33:08)</div></body></html>

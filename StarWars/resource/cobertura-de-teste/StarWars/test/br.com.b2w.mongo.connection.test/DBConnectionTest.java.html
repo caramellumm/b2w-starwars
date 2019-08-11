@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>DBConnectionTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">StarWars (11/08/2019 19:33:08)</a> &gt; <a href="../../index.html" class="el_group">StarWars</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.source.html" class="el_package">br.com.b2w.mongo.connection.test</a> &gt; <span class="el_source">DBConnectionTest.java</span></div><h1>DBConnectionTest.java</h1><pre class="source lang-java linenums">package br.com.b2w.mongo.connection.test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
+import javax.ws.rs.core.Application;
+
+import org.bson.types.ObjectId;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.JerseyTest;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.DeleteResult;
+
+import br.com.b2w.exception.IntegrationException;
+import br.com.b2w.mongo.connection.DBConnection;
+import br.com.b2w.mongo.document.Planetas;	
+
+<span class="fc" id="L27">public class DBConnectionTest extends JerseyTest{</span>
+	
+<span class="fc" id="L29">	public static String PLANETA_1 = &quot;Terra Teste&quot;;</span>
+<span class="fc" id="L30">	public static String PLANETA_2 = &quot;Jupter Teste&quot;;</span>
+<span class="fc" id="L31">	public static String PLANETA_3 = &quot;Venus Teste&quot;;</span>
+<span class="fc" id="L32">	public static String PLANETA_4 = &quot;Saturno Teste&quot;;</span>
+	
+	public static ObjectId P1Id;
+	public static ObjectId P2Id;
+	public static ObjectId P3Id;
+	
+<span class="fc" id="L38">	public static DBConnection connection;</span>
+	
+	@Override
+    protected Application configure() {
+<span class="fc" id="L42">        return new ResourceConfig(DBConnection.class);</span>
+    }
+	
+	@Before
+	public void inserirMassaParaTestes() throws IntegrationException {
+		
+<span class="fc" id="L48">		connection = new DBConnection();</span>
+		
+<span class="fc" id="L50">		Planetas planeta1 = new Planetas();</span>
+<span class="fc" id="L51">		planeta1.setNome(PLANETA_1);</span>
+<span class="fc" id="L52">		planeta1.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L53">		planeta1.setClima(&quot;quente&quot;);</span>
+<span class="fc" id="L54">		connection.inserirPlaneta(planeta1);</span>
+		
+		
+		
+<span class="fc" id="L58">		Planetas planeta2 = new Planetas();</span>
+<span class="fc" id="L59">		planeta2.setNome(PLANETA_2);</span>
+<span class="fc" id="L60">		planeta2.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L61">		planeta2.setClima(&quot;quente&quot;);</span>
+<span class="fc" id="L62">		connection.inserirPlaneta(planeta2);</span>
+		
+
+<span class="fc" id="L65">		Planetas planeta3 = new Planetas();</span>
+<span class="fc" id="L66">		planeta3.setNome(PLANETA_3);</span>
+<span class="fc" id="L67">		planeta3.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L68">		planeta3.setClima(&quot;quente&quot;);</span>
+<span class="fc" id="L69">		connection.inserirPlaneta(planeta3);</span>
+		
+		
+		
+<span class="fc" id="L73">		FindIterable&lt;Planetas&gt; dadosPlaneta1 = connection.buscarPlanetasPorNome(planeta1.getNome());</span>
+<span class="fc" id="L74">		Planetas p1 = dadosPlaneta1.first();</span>
+<span class="fc" id="L75">		P1Id = p1.getId();</span>
+		
+
+<span class="fc" id="L78">		FindIterable&lt;Planetas&gt; dadosPlaneta2 = connection.buscarPlanetasPorNome(planeta2.getNome());</span>
+<span class="fc" id="L79">		Planetas p2 = dadosPlaneta2.first();</span>
+<span class="fc" id="L80">		P2Id = p2.getId();</span>
+		
+
+<span class="fc" id="L83">		FindIterable&lt;Planetas&gt; dadosPlaneta3 = connection.buscarPlanetasPorNome(planeta3.getNome());</span>
+<span class="fc" id="L84">		Planetas p3 = dadosPlaneta3.first();</span>
+<span class="fc" id="L85">		P3Id = p3.getId();</span>
+		
+<span class="fc" id="L87">	}</span>
+	
+	@After
+	public void removerMassaTeste() throws IntegrationException {
+<span class="fc" id="L91">		connection = new DBConnection();</span>
+<span class="fc" id="L92">		connection.removerPlanetaPorNome(PLANETA_1);</span>
+<span class="fc" id="L93">		connection.removerPlanetaPorNome(PLANETA_2);</span>
+<span class="fc" id="L94">		connection.removerPlanetaPorNome(PLANETA_3);</span>
+<span class="fc" id="L95">		connection.removerPlanetaPorNome(PLANETA_4);</span>
+<span class="fc" id="L96">	}</span>
+	
+	@Test
+	public void testGetCollection() throws IntegrationException {
+<span class="fc" id="L100">		connection = new DBConnection();</span>
+<span class="fc" id="L101">		MongoCollection&lt;Planetas&gt; collection = connection.getCollection();</span>
+<span class="fc" id="L102">		String databaseName = collection.getNamespace().getDatabaseName();</span>
+<span class="fc" id="L103">		assertEquals(&quot;starwars&quot;, databaseName);</span>
+<span class="fc" id="L104">	}</span>
+	
+	@Test(expected = IntegrationException.class)
+	public void testErroGetCollection() throws IntegrationException {
+<span class="fc" id="L108">		connection = new DBConnection();</span>
+<span class="fc" id="L109">		DBConnection spy = spy(connection);</span>
+<span class="fc" id="L110">		when(spy.getCollection()).thenThrow(new IntegrationException(&quot;Erro ao recuperar a conexão&quot;, new Exception()));</span>
+<span class="nc" id="L111">		spy.getCollection();</span>
+<span class="nc" id="L112">	}</span>
+	
+	@Test
+	public void testCloseConnection() throws IntegrationException {
+<span class="fc" id="L116">		connection = new DBConnection();</span>
+<span class="fc" id="L117">		connection.closeConnection();</span>
+<span class="fc" id="L118">	}</span>
+	
+	@Test
+	public void testBuscarPlanetas() throws IntegrationException {
+<span class="fc" id="L122">		connection = new DBConnection();</span>
+<span class="fc" id="L123">		FindIterable&lt;Planetas&gt; buscarPlanetas = connection.buscarPlanetas();</span>
+<span class="fc" id="L124">		assertNotNull(buscarPlanetas.first());</span>
+<span class="fc" id="L125">	}</span>
+	
+	@Test(expected = IntegrationException.class)
+	public void testErroBuscarPlanetas() throws IntegrationException {
+<span class="fc" id="L129">		connection = new DBConnection();</span>
+<span class="fc" id="L130">		DBConnection spy = spy(connection);</span>
+<span class="fc" id="L131">		when(spy.buscarPlanetas()).thenThrow(new IntegrationException(&quot;Erro no fluxo de buscar planetas&quot;, new Exception()));</span>
+<span class="nc" id="L132">		spy.buscarPlanetas();</span>
+		
+<span class="nc" id="L134">	}</span>
+	
+	@Test
+	public void testInserirPlaneta() throws IntegrationException {
+<span class="fc" id="L138">		connection = new DBConnection();</span>
+<span class="fc" id="L139">		Planetas planeta4 = new Planetas();</span>
+<span class="fc" id="L140">		planeta4.setNome(PLANETA_4);</span>
+<span class="fc" id="L141">		planeta4.setTerreno(&quot;arenoso&quot;);</span>
+<span class="fc" id="L142">		planeta4.setClima(&quot;quente&quot;);</span>
+<span class="fc" id="L143">		connection.inserirPlaneta(planeta4);</span>
+<span class="fc" id="L144">	}</span>
+	
+	
+	@Test
+	public void testbuscarPlanetasPorNome() throws IntegrationException {
+<span class="fc" id="L149">		connection = new DBConnection();</span>
+<span class="fc" id="L150">		FindIterable&lt;Planetas&gt; buscarPlanetasPorNome = connection.buscarPlanetasPorNome(PLANETA_1);</span>
+<span class="fc" id="L151">		assertNotNull(buscarPlanetasPorNome.first());</span>
+<span class="fc" id="L152">	}</span>
+	
+	
+	@Test(expected = IntegrationException.class)
+	public void testErrobuscarPlanetasPorNome() throws IntegrationException {
+<span class="fc" id="L157">		connection = new DBConnection();</span>
+<span class="fc" id="L158">		DBConnection spy = spy(connection);</span>
+<span class="fc" id="L159">		when(spy.buscarPlanetasPorNome(anyString())).thenThrow(new IntegrationException(&quot;Erro no fluxo de buscar planetas&quot;, new Exception()));</span>
+<span class="nc" id="L160">		spy.buscarPlanetasPorNome(PLANETA_1);</span>
+		
+<span class="nc" id="L162">	}</span>
+	
+	@Test
+	public void testBuscarPlanetasPorId() throws IntegrationException {
+<span class="fc" id="L166">		connection = new DBConnection();</span>
+<span class="fc" id="L167">		FindIterable&lt;Planetas&gt; buscarPlanetasPorId = connection.buscarPlanetasPorId(P1Id);</span>
+<span class="fc" id="L168">		assertNotNull(buscarPlanetasPorId.first());</span>
+<span class="fc" id="L169">	}</span>
+	
+	@Test(expected = IntegrationException.class)
+	public void testErroBuscarPlanetasPorId() throws IntegrationException {
+<span class="fc" id="L173">		connection = new DBConnection();</span>
+<span class="fc" id="L174">		DBConnection spy = spy(connection);</span>
+<span class="fc" id="L175">		when(spy.buscarPlanetasPorId(anyObject())).thenThrow(new IntegrationException(&quot;Erro no fluxo de buscar planetas&quot;, new Exception()));</span>
+<span class="nc" id="L176">		spy.buscarPlanetasPorId(P1Id);</span>
+<span class="nc" id="L177">	}</span>
+	
+	@Test
+	public void testRemoverPlanetaPorNome() throws IntegrationException {
+<span class="fc" id="L181">		connection = new DBConnection();</span>
+<span class="fc" id="L182">		DeleteResult removerPlanetaPorNome = connection.removerPlanetaPorNome(PLANETA_2);</span>
+<span class="fc" id="L183">		Long deletedCount = removerPlanetaPorNome.getDeletedCount();</span>
+<span class="fc" id="L184">		Long deletados = new Long(&quot;1&quot;);</span>
+<span class="fc" id="L185">		assertEquals(deletados, deletedCount);</span>
+<span class="fc" id="L186">	}</span>
+	
+	@Test(expected = IntegrationException.class)
+	public void testErroRemoverPlanetaPorNome() throws IntegrationException {
+<span class="fc" id="L190">		connection = new DBConnection();</span>
+<span class="fc" id="L191">		DBConnection spy = spy(connection);</span>
+<span class="fc" id="L192">		when(spy.removerPlanetaPorNome(anyString())).thenThrow(new IntegrationException(&quot;Erro no fluxo de remover Planeta&quot;, new Exception()));</span>
+<span class="nc" id="L193">		spy.removerPlanetaPorNome(PLANETA_2);</span>
+<span class="nc" id="L194">	}</span>
+	
+	@Test
+	public void testRemoverPlanetaPorID() throws IntegrationException {
+<span class="fc" id="L198">		connection = new DBConnection();</span>
+<span class="fc" id="L199">		DeleteResult removerPlanetaPorID = connection.removerPlanetaPorID(P3Id.toString());</span>
+<span class="fc" id="L200">		Long deletedCount = removerPlanetaPorID.getDeletedCount();</span>
+<span class="fc" id="L201">		Long long1 = new Long(&quot;1&quot;);</span>
+<span class="fc" id="L202">		assertEquals(long1, deletedCount);</span>
+<span class="fc" id="L203">	}</span>
+	
+	@Test(expected = IntegrationException.class)
+	public void testErroRemoverPlanetaPorID() throws IntegrationException {
+<span class="fc" id="L207">		connection = new DBConnection();</span>
+<span class="fc" id="L208">		DBConnection spy = spy(connection);</span>
+<span class="fc" id="L209">		when(spy.removerPlanetaPorID(P3Id.toString())).thenThrow(new IntegrationException(&quot;Erro no fluxo de remover planeta&quot;, new Exception()));</span>
+<span class="fc" id="L210">		String id = P3Id.toString();</span>
+<span class="nc" id="L211">		spy.removerPlanetaPorID(id);</span>
+<span class="nc" id="L212">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>StarWars (11/08/2019 19:33:08)</div></body></html>

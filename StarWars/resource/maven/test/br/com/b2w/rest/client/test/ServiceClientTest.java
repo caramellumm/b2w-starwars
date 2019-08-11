@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.core.Application;
@@ -14,10 +15,17 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
 import br.com.b2w.exception.ServiceException;
-import br.com.b2w.mongo.document.ApiStarWarsPlanet;
 import br.com.b2w.rest.client.ServiceClient;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.PersistenceConfiguration;
+import net.sf.ehcache.config.PersistenceConfiguration.Strategy;
+import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 
-public class ServiceClientTest  extends JerseyTest{
+public class ServiceClientTest extends JerseyTest{
+	
+	private static final String OBJETO_CACHEADO = "OBJETO_CACHEADO";
 	
 	@Override
     protected Application configure() {
@@ -27,8 +35,23 @@ public class ServiceClientTest  extends JerseyTest{
 	@Test
 	public void testConsultarPlanetas() throws ServiceException {
 		ServiceClient serviceClient = new ServiceClient();
-		List<ApiStarWarsPlanet> consultarPlanetas = serviceClient.consultarPlanetas();
-		assertNotNull(consultarPlanetas.get(0));
+		CacheManager.getInstance().removeAllCaches();
+		HashMap<String, List<String>> consultarPlanetas = serviceClient.consultarPlanetas();
+		assertNotNull(consultarPlanetas.size());
+	}
+
+	
+	@Test
+	public void testConsultarPlanetasCache() throws ServiceException {
+		ServiceClient serviceClient = new ServiceClient();
+		
+		CacheManager.getInstance().removeAllCaches();
+		
+		Cache cache = new Cache(new CacheConfiguration(OBJETO_CACHEADO, 5000).memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU)
+				.eternal(false).timeToLiveSeconds(60).timeToIdleSeconds(90).persistence(new PersistenceConfiguration().strategy(Strategy.NONE)));
+		CacheManager.getInstance().addCache(cache);
+		HashMap<String, List<String>> consultarPlanetas = serviceClient.consultarPlanetas();
+		assertNotNull(consultarPlanetas.size());
 	}
 	
 	@Test(expected = ServiceException.class)
