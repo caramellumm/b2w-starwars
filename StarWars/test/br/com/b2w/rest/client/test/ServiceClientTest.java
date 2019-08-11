@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.core.Application;
@@ -14,7 +15,6 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
 import br.com.b2w.exception.ServiceException;
-import br.com.b2w.mongo.document.ApiStarWarsPlanet;
 import br.com.b2w.rest.client.ServiceClient;
 
 public class ServiceClientTest  extends JerseyTest{
@@ -27,8 +27,8 @@ public class ServiceClientTest  extends JerseyTest{
 	@Test
 	public void testConsultarPlanetas() throws ServiceException {
 		ServiceClient serviceClient = new ServiceClient();
-		List<ApiStarWarsPlanet> consultarPlanetas = serviceClient.consultarPlanetas();
-		assertNotNull(consultarPlanetas.get(0));
+		HashMap<String, List<String>> consultarPlanetas = serviceClient.consultarPlanetas();
+		assertNotNull(consultarPlanetas.size());
 	}
 	
 	@Test(expected = ServiceException.class)
