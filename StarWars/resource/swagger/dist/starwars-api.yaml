@@ -1,0 +1,201 @@
+openapi: 3.0.1
+info:
+  title: API-StarWars
+  description: Exemplo de utilização da Api para buscar cadastrar planetas e verificar se alguns dos planetas cadastrados faz parte do universo de starwars, informando a aparição em filmes para cada planeta.
+  contact:
+    name: ': Desenvolvedor'
+    email: alex.duarte.ferreira@gmail.com
+  version: 1.0.0
+externalDocs:
+  description: Saber mais sobre o swagger
+  url: http://swagger.io
+servers:
+- url: http://ec2-18-228-116-113.sa-east-1.compute.amazonaws.com/starwars-v1/rs
+tags:
+- name: starwars-v1
+  description: Api para busca de planetas
+  externalDocs:
+    description: 'Para mais informações acesse:'
+    url: https://github.com/AlexDuarte13/b2w-starwars
+paths:
+  /planetas:
+    get:
+      tags:
+      - starwars-v1
+      summary: Buscar planetas
+      description: Retorna todos os planetas do banco de dados
+      operationId: listarPlanetas
+      responses:
+        200:
+          description: Retorno com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/listaPlanetas'
+        405:
+          description: Metodo nao encontrado
+          content: {}
+        500:
+          description: Erro interno ao buscar planetas
+          content: {}
+  
+  /planetas/{nome}/{clima}/{terreno}:
+    put:
+      tags:
+      - starwars-v1
+      summary: Inserir novo planeta
+      description: Deve inserir um novo planeta
+      operationId: inserirPlanetas
+      parameters:
+        - in: path
+          name: nome
+          schema:
+            type: string
+          required: true
+          description: Nome do Planeta que vai ser inserido
+        - in: path
+          name: clima
+          schema:
+            type: string
+          required: true
+          description: Clima do Planeta que vai ser inserido
+        - in: path
+          name: terreno
+          schema:
+            type: string
+          required: true
+          description: Terreno do Planeta que vai ser inserido
+      responses:
+        200:
+          description: Planeta inserido com sucesso
+          content: 
+            application/json:
+              schema: 
+                type: string
+                example: "{ retorno: Insert Efetuado com Sucesso }"
+                         
+        405:
+          description: Metodo nao encontrado
+          content: {}
+        500:
+          description: Erro interno no servidor
+          content: {}
+  
+  /planetas/{nome}:
+    get:
+      tags:
+      - starwars-v1
+      summary: Buscar planetas por nome
+      description: Retorna todos os planetas do banco de dados
+      operationId: listarPlanetasNome
+      parameters:
+        - in: path
+          name: nome
+          schema:
+            type: string
+          required: true
+          description: Nome do Planeta que deve ser buscado
+      responses:
+        200:
+          description: Retorno com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/listaPlanetas'
+        405:
+          description: Metodo nao encontrado
+          content: {}
+        500:
+          description: Erro interno ao buscar planetas
+          content: {}
+          
+  
+  
+  /planetas/{id}:
+    post:
+      tags:
+      - starwars-v1
+      summary: Buscar planetas por id
+      description: Retorna todos os planetas do banco de dados
+      operationId: listarPlanetasId
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Nome do Planeta que deve ser buscado
+      responses:
+        200:
+          description: Retorno com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/listaPlanetas'
+        405:
+          description: Metodo nao encontrado
+          content: {}
+        500:
+          description: Erro interno ao buscar planetas
+          content: {}
+          
+    delete:
+      tags:
+      - starwars-v1
+      summary: Deletar planeta
+      description: Deve remover um planeta de acordo com o id informado
+      operationId: removerPlaneta
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Id do Planeta que deve ser deletado
+      responses:
+        200:
+          description: Planeta deletado com sucesso
+          content:
+            application/json:
+              schema: 
+                type: string
+                example: "{ Numero de Documentos Deletados: 1, retorno: Documento deletado com Sucesso }"
+        405:
+          description: Metodo nao encontrado
+          content: {}
+              
+        500:
+          description: Erro interno no servidor
+          content:
+            text:
+              schema:
+                type: string
+                example: "Erro ao remover planta: Erro ao excluir planeta por nome"
+          
+components:
+  schemas:
+    listaPlanetas:
+      type: object
+      properties:
+        Terreno:
+          type: string
+          example: Montanhoso
+        Clima:
+          type: string
+          example: Arido
+        Id:
+          type: integer
+        Nome:
+          type: string
+          example: Terra
+        Filmes:
+          type: array
+          items:
+            type: string
+            example: https://swapi.co/api/films/1/
