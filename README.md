@@ -1,4 +1,4 @@
-# b2w-starwars
+# API-StarWars
 Aplicação criada para o DesafioB2W, que consistiu em criar uma API para manter planetas e consumir uma API externa para verificar se os planetas cadastrados já tiveram aparições em algum filme da franquina do **StarWars**
 
 ## Arquitetura
