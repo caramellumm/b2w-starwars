@@ -1,8 +1,5 @@
 package br.com.b2w.rest;
 
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -22,8 +19,6 @@ import br.com.b2w.business.PlanetasBusiness;
 	
 @Path("/planetas")
 public class PlanetasRest {
-	
-	private static final Logger LOGGER = LogManager.getLogManager().getLogger(PlanetasRest.class.getName());
 	
 	@PUT
 	@Path("{nome}/{clima}/{terreno}")

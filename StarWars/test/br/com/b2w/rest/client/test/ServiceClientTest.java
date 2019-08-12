@@ -47,7 +47,7 @@ public class ServiceClientTest extends JerseyTest{
 		
 		CacheManager.getInstance().removeAllCaches();
 		
-		Cache cache = new Cache(new CacheConfiguration(OBJETO_CACHEADO, 5000).memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU)
+		Cache cache = new Cache(new CacheConfiguration(OBJETO_CACHEADO, 50000).memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU)
 				.eternal(false).timeToLiveSeconds(60).timeToIdleSeconds(90).persistence(new PersistenceConfiguration().strategy(Strategy.NONE)));
 		CacheManager.getInstance().addCache(cache);
 		HashMap<String, List<String>> consultarPlanetas = serviceClient.consultarPlanetas();

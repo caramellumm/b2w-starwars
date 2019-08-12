@@ -1,5 +1,6 @@
 package br.com.b2w.rest.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,10 +37,10 @@ public class ServiceClient {
 
 			if (!cacheExists) {
 								
-				ApiSwarWarsResult apiSwarWarsResult = getPlanets();
-				HashMap<String, List<String>> mapPlanetas = listaParaMap(apiSwarWarsResult.getResults());
-				Cache cache = new Cache(new CacheConfiguration(OBJETO_CACHEADO, 5000).memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU)
-						.eternal(false).timeToLiveSeconds(60).timeToIdleSeconds(90).persistence(new PersistenceConfiguration().strategy(Strategy.NONE)));
+				List<ApiStarWarsPlanet> listResults = getPlanets();
+				HashMap<String, List<String>> mapPlanetas = listaParaMap(listResults);
+				Cache cache = new Cache(new CacheConfiguration(OBJETO_CACHEADO, 50000).memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU)
+						.eternal(false).timeToLiveSeconds(300).timeToIdleSeconds(420).persistence(new PersistenceConfiguration().strategy(Strategy.NONE)));
 				
 				CacheManager.getInstance().addCache(cache);
 				CacheManager.getInstance().getCache(OBJETO_CACHEADO).put(new Element(OBJETO_SWAPI, mapPlanetas));
@@ -50,8 +51,8 @@ public class ServiceClient {
 				Element element = CacheManager.getInstance().getCache(OBJETO_CACHEADO).get(OBJETO_SWAPI);
 				
 				if(null == element) {
-					ApiSwarWarsResult apiSwarWarsResult = getPlanets();
-					HashMap<String, List<String>> mapPlanetas = listaParaMap(apiSwarWarsResult.getResults());
+					List<ApiStarWarsPlanet> listResults = getPlanets();
+					HashMap<String, List<String>> mapPlanetas = listaParaMap(listResults);
 					CacheManager.getInstance().getCache(OBJETO_CACHEADO).put(new Element(OBJETO_SWAPI, mapPlanetas));
 					element = CacheManager.getInstance().getCache(OBJETO_CACHEADO).get(OBJETO_SWAPI);
 				}
@@ -66,12 +67,35 @@ public class ServiceClient {
 		}
 	}
 	
-	private ApiSwarWarsResult getPlanets() throws ServiceException {
+	private List<ApiStarWarsPlanet> getPlanets() throws ServiceException {
+		
+		try {
+			
+			List<ApiStarWarsPlanet> listResults = new ArrayList<ApiStarWarsPlanet>();
+			ApiSwarWarsResult result = getPlanetsPerPage(URL_SERVICE);
+			
+			listResults.addAll(result.getResults());
+			while(null != result.getNext()) {
+				result = getPlanetsPerPage(result.getNext());
+				listResults.addAll(result.getResults());
+			}
+			
+			
+			return listResults;
+		} catch (Exception e) {
+			throw new ServiceException(e);
+		}
+		
+	}
+	
+
+	
+	private ApiSwarWarsResult getPlanetsPerPage(String urlPage) throws ServiceException {
 		
 		try {
 			
 			Client client = Client.create();
-			WebResource webResource = client.resource(URL_SERVICE);
+			WebResource webResource = client.resource(urlPage);
 			Builder accept = webResource.header("Content-Type", "application/x-www-form-urlencoded")
 					.header("User-Agent", "").accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON);
 			ClientResponse response = accept.get(ClientResponse.class);
