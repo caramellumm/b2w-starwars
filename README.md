@@ -1,5 +1,5 @@
 # b2w-starwars
-Aplicação para avaliação....
+Aplicação criada para o DesafioB2W, que consistiu em criar uma API para manter planetas e consumir uma API externa para verificar se os planetas cadastrados já tiveram aparições em algum filme da franquina do **StarWars**
 
 ## Arquitetura
 Api baseada em arquitetura rest, sendo orquestrada através do docker-compose e publicada no tomcat. A base de dados esolhida para o projeto é baseada em banco de dados não relacional. O acesso ao container docker é gerenciado pelo Nginx, onde apenas ele pode ser consumido via http e assim aumentando a segurança da arquitetura, uma vez que nem o servidor nem a base de dados tem o acesso via http.
@@ -13,7 +13,7 @@ Api desenvolvida usando rest sendo seu framework o jersey, cujo apresenta uma ga
 versão jersey -
 
 
-#### Cache
+### Cache
 De acordo com as politicas rest, o ehcache do apache foi utilizado para chachear os dados obtidos através da api swapi.co para evitar de sempre ter que consumir o serviço, e assim melhorando a performance de resposta da API.
 versao ehcache -
 
