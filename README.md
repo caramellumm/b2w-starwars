@@ -1,5 +1,5 @@
 # b2w-starwars
-Aplicação para avaliação
+Aplicação para avaliação....
 
 ## Arquitetura
 Api baseada em arquitetura rest, sendo orquestrada através do docker-compose e publicada no tomcat. A base de dados esolhida para o projeto é baseada em banco de dados não relacional. O acesso ao container docker é gerenciado pelo Nginx, onde apenas ele pode ser consumido via http e assim aumentando a segurança da arquitetura, uma vez que nem o servidor nem a base de dados tem o acesso via http.
@@ -27,8 +27,22 @@ versão Tomcat
 Para essa tarefa o MondoDB foi utilizado como banco de dados não relacional, pois já está bem consolidado e popular. Com isso tem muito mais ferramentas de integração com o java consolidado
 
 
+## Docker
+sobre o docker
+### Docker-Compose
+sobre o docker compose e como os arquivos esão feitos
 
 
+## Swagger
+[Documentacao Api Swagger] (http://ec2-18-228-116-113.sa-east-1.compute.amazonaws.com/dist/index.html)
+
+
+## Covarage
+[Cobertura de Testes] (http://ec2-18-228-116-113.sa-east-1.compute.amazonaws.com/cobertura-de-teste/index.html)
+
+
+# TESTES
+como é executado o teste
 
 
 
