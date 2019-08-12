@@ -37,9 +37,9 @@ Para essa tarefa o MondoDB foi utilizado como banco de dados não relacional, po
 ### Docker-Compose
 O docker compose é justamente a orquestração de multiplos containers, onde dentro desse arquivo descritivo é inserido quais as imagens serão usadas, qual rede vão acessar no continer, a ordem de start das imagens dentre outras coisas. Abaixo segue comando usado para o start da api e seus serviços pelo docker-compose
 
-'''
-teste teste teste
-'''
+```
+$ sudo docker-compose up
+```
 
 
 ## Swagger
@@ -51,7 +51,11 @@ teste teste teste
 Teste unitário consiste em testar os fluxos de seu sistema em forma de componentes, para que seja assegurado que a lógica criada está de acordo com o esperado
 
 ### Testes
-Para efetuar os testes na api criada, foi utulizado o docker-compose com orquestrador e para esse continer é utilizado o MongoDb e o Maven para executar a rotina de testes.
+Para efetuar os testes na api criada, foi utulizado o docker-compose com orquestrador e para esse continer é utilizado o MongoDb e o Maven para executar a rotina de testes. Comando para rodar os testes abaixo:
+
+```
+$ sudo docker-compose -f docker-compose-test.yml up
+```
 
 ### Eclemma
 Para verificar a cobertura de testes tanto em pequenos componentes como no todo da aplicação, foi utilizado o plugin do eclemma, que é instalado no eclipse. E uma vez que os testes são processados por esse plugin, é gerado gráficos com a estatística do que foi ou não testado. No link abaixo foi publicado no servidor
