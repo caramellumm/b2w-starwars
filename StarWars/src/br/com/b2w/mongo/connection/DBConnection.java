@@ -32,7 +32,7 @@ public class DBConnection {
 					fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 			
 			MongoClientOptions optsWithCodecs = MongoClientOptions.builder().codecRegistry(pojoCodecRegistry).build();
-			mongoClient = new MongoClient(new ServerAddress("localhost", 27017), optsWithCodecs);
+			mongoClient = new MongoClient(new ServerAddress("mongodb", 27017), optsWithCodecs);
 			
 
 		} catch (MongoSocketOpenException e) {
