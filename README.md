@@ -12,22 +12,18 @@ Aplicação criada para o DesafioB2W, que consistiu em criar uma API para manter
 
 ### API
 * Api desenvolvida usando rest sendo seu framework o jersey, cujo apresenta uma gama de funções feitas diretamente para a arquitetura rest o que facilita o desenvolvimento e aumenta a produtividade
-versão jersey -
 <br/>
 
 ### Cache
 * De acordo com as politicas rest, o ehcache do apache foi utilizado para chachear os dados obtidos através da api swapi.co para evitar de sempre ter que consumir o serviço, e assim melhorando a performance de resposta da API.
-versao ehcache -
 <br/>
 
 ### Proxy
 * O Nginx foi utilizado por ser uma ferramenta bem versátil e já estar preparada para fazer o proxy reverso, ou seja, redirecionando a chamada para o servidor devido.
-versão Nginx
 <br/>
 
 ### Servidor da Aplicação
 * O servidor escolhido para essa arquitetura é o tomcat, devido a ser leve e não demandar muito da maquina hospedeira em relação a recursos e assim agilizando o processo de deploy e de desenvolvimento.
-versão Tomcat
 <br/>
 
 ### Bando de Dados
