@@ -48,7 +48,7 @@ $ sudo docker-compose up
 
 ## Swagger
 * É uma das ferramentas de mercado mais conhecidas para projetar, criar, documentar e consumir serviços baseados na arquitetura rest, então nada mais justo do que usar essa ótima ferramenta para documentar a api. Link para a documentação:
-[Documentacao Api Swagger](http://ec2-18-228-116-113.sa-east-1.compute.amazonaws.com/dist/index.html)
+[Documentacao API-StarWars Swagger](http://ec2-18-228-116-113.sa-east-1.compute.amazonaws.com/dist/index.html)
 <br/>
 
 ## Testes Unitários
